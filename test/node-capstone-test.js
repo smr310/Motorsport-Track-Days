@@ -11,7 +11,7 @@ chai.use(chaiHttp);
 
 const { app, runServer, closeServer } = require('../server');
 
-describe('BlogPosts API resource', function () {
+describe('API resource', function () {
 
     // we need each of these hook functions to return a promise
     // otherwise we'd need to call a `done` callback. `runServer`,
