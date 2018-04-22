@@ -50,42 +50,7 @@ describe('API resource', function () {
                 })
         });
 
-        it('should return dashboard html', function () {
-            let res;
-            return chai.request(app)
-                .get('/dashboard.html')
-                .then(function (_res) {
-                    res = _res
-                    expect(res).to.have.status(200);
-                    expect(res).to.be.html;
-
-                })
-        });
-
-        it('should return reserve html', function () {
-            let res;
-            return chai.request(app)
-                .get('/reserve.html')
-                .then(function (_res) {
-                    res = _res
-                    expect(res).to.have.status(200);
-                    expect(res).to.be.html;
-
-                })
-        });
-
-        it('should return edit html', function () {
-            let res;
-            return chai.request(app)
-                .get('/edit.html')
-                .then(function (_res) {
-                    res = _res
-                    expect(res).to.have.status(200);
-                    expect(res).to.be.html;
-
-                })
-        });
-
+       
     });
 
 
