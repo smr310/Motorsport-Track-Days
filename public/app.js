@@ -1,35 +1,5 @@
 
-//try delete first and then post 
-//delete from registeredEvents array by ID 
-//delete from page 
-
-//delete and edit button 
-//delete should call delete function and pass id 
-//edit button shoud put function 
-
-
-
-//PUT Request
-//Get what db sees (by using id) --> this will be one of the events (or several)
-//Lets say it gets first event 
-//If you want to upgrade trackName --> 
-//You update new trackName 
-//Send back to db so it knows about it 
-//db will send back if your update was successful
-//if it is successful, display that to the user 
-
-
-
-// getRegisteredEvents function name and argument can stay the
-// same after we have a live API, but its internal
-// implementation will change. Instead of using a
-// timeout function that returns mock data, it will
-// use jQuery's AJAX functionality to make a call
-// to the server and then run the callbackFn
-
-
 let MOCK_UPCOMING_EVENTS = {
-    
     "events": [
         {
             "id": "aaaaaa",
@@ -50,10 +20,7 @@ let MOCK_UPCOMING_EVENTS = {
     ]
 }
 
-
-
 let MOCK_REGISTERED_EVENTS = {
-
     "events": [
         {
             "id": "111111",
@@ -80,10 +47,6 @@ let MOCK_REGISTERED_EVENTS = {
 
 }
 
-
-
-
-
 // this function can stay the same even when we
 // are connecting to real API
 function getAndDisplayRegisteredEvents() {
@@ -93,7 +56,6 @@ function getAndDisplayRegisteredEvents() {
     })
    
 }
-
 
 function getRegisteredEvents(callbackFn) {
     setTimeout(function () { callbackFn(MOCK_REGISTERED_EVENTS) }, 100);
@@ -124,10 +86,8 @@ function updateDOM(data) {
     }
 }
 
-
 function getPositionByElement (data, element) {
     let _id = $(element).parent().attr("id")
-
     let eventArray = data.events;
 
     //returns array with only ids 
@@ -135,7 +95,6 @@ function getPositionByElement (data, element) {
 
     return elementPos;
 }
-
 
 
 //DELETE
@@ -156,7 +115,6 @@ function deleteRegisteredEvent() {
         MOCK_REGISTERED_EVENTS.registeredEvents = eventArray; 
         console.log("this is updated Mock Data Array:", MOCK_REGISTERED_EVENTS.registeredEvents)
 
-
         updateDOM(MOCK_REGISTERED_EVENTS);
     })
 }
@@ -167,19 +125,106 @@ function deleteRegisteredEvent() {
 function editRegisteredEvent() {
     $('body').on('click', '.edit-button', function (event) {
         
-        let eventArray = MOCK_REGISTERED_EVENTS.events;
+        //ask user for input
+        $('.dashboard-div').html("");
 
-        let elementPos = getPositionByElement(this);
+        $('.dashboard-div').append(
+            `
+            <form id="update">
+                Will you be renting a motorcycle with us: <br>
+                <input type="radio" name="motorcycleRentalAnswer" value="Yes">Yes<br>
+                <input type="radio" name="motorcycleRentalAnswer" value="No">No, I will be riding my own motorcylce<br>
+                <br><br>
+                If you need to rent safety gear, please select all items you will need to rent: <br>
+                <div>
+                    <input type="checkbox" name="gearRental" value="Helmet">
+                    <label for="helmet">Helmet</label>
+                </div>
+                <div>
+                    <input type="checkbox" name="gearRental" value="Leather-Racing-Suit">
+                    <label for="Leather-Racing-Suit">Leather Racing Suit</label>
+                </div>
+                <div>
+                <input type="checkbox" name="gearRental" value="Gloves">
+                <label for="gloves">Gloves</label>
+                </div>
+                <div>
+                <input type="checkbox" name="gearRental" value="Boots">
+                <label for="Boots">Boots</label>
+                <div>
+                <input type="submit" value="Submit">
+                </div>
+            </form>
+            `
+        );
 
-        eventArray[elementPos].needToRentBike = true;
-        updateDOM(MOCK_REGISTERED_EVENTS);
+
+        let position = getPositionByElement(MOCK_REGISTERED_EVENTS, this)
+        console.log(position);
+    
+        $("#update").submit(function (event) {
+            event.preventDefault();
+            console.log("update submit button clicked")
+
+            let $inputs = $('#update :input');
+
+            let values = {};
+
+            values.motorcycleRentalAnswer = $('input[name=motorcycleRentalAnswer]:checked').val();
+            values.gearRental = []
+
+            let gearRentalDOMArray = $('input[name=gearRental]:checked');
+
+            for (let i = 0; i < gearRentalDOMArray.length; i++) {
+                values.gearRental.push(gearRentalDOMArray[i].value);
+            }
+
+
+            //Convert user input into customer-facing language and append to object 
+            console.log(values);
+
+            let helmetAnswer = false;
+            let bootsAnswer = false;
+            let suitAnswer = false;
+            let glovesAnswer = false;
+
+            values.gearRental.forEach(function (gearItem) {
+                if (gearItem === "Helmet") {
+                    helmetAnswer = true;
+                }
+            });
+
+            values.gearRental.forEach(function (gearItem) {
+                if (gearItem === "Boots") {
+                    bootsAnswer = true;
+                }
+            });
+
+            values.gearRental.forEach(function (gearItem) {
+                if (gearItem === "Leather-Racing-Suit") {
+                    suitAnswer = true;
+                }
+            });
+
+            values.gearRental.forEach(function (gearItem) {
+                if (gearItem === "Gloves") {
+                    glovesAnswer = true;
+                }
+            });
+
+            MOCK_REGISTERED_EVENTS.events[position]['needToRentBike'] = values.motorcycleRentalAnswer;
+            MOCK_REGISTERED_EVENTS.events[position]['needToRentHelmet'] = helmetAnswer;
+            MOCK_REGISTERED_EVENTS.events[position]['needToRentSuit'] = suitAnswer;
+            MOCK_REGISTERED_EVENTS.events[position]['needToRentGloves'] = glovesAnswer;
+            MOCK_REGISTERED_EVENTS.events[position]['needToRentBoots'] = bootsAnswer;
+
+            console.log(MOCK_REGISTERED_EVENTS.events)
+
+            //update DOM 
+            updateDOM(MOCK_REGISTERED_EVENTS);
+        });
     })
-
-   
 }
-
-
-
 
 
 function displayUpcomingEvents(data) {
@@ -209,14 +254,11 @@ function homePageButtonClickHandler() {
 }
 
 
-
 //POST 
-
 
 function registerButtonClickHandler() {
     $('body').on('click', '.register-button', function (event) {
         
-        //ask user for input
         //update DOM to ask for user input 
         $('.dashboard-div').html("");
 
@@ -334,17 +376,6 @@ function registerButtonClickHandler() {
         
             //update DOM 
             updateDOM(MOCK_REGISTERED_EVENTS);
-
-
-        //Object.assign --> merging objects 
-        //implement edit 
-
-        //API 
-        //Model --> move to server side 
-
-        //don't worry about db yet 
-
-
         });
     });
 }
