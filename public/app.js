@@ -59,20 +59,26 @@ let MOCK_REGISTERED_EVENTS = {
             "id": "111111",
             "trackName": "New Hampshire Motor Speedway",
             "eventDate": "June 1, 2018",
-            "needToRentBike": true
+            "needToRentBike": true,
+            "needToRentHelmet": false,
+            "needToRentSuit": false,
+            "needToRentGloves": false,
+            "needToRentBoots": false
         },
         {
             "id": "222222",
             "trackName": "Palmer Motorsports Park",
             "eventDate": "August 5, 2018",
-            "needToRentBike": false
+            "needToRentBike": false,
+            "needToRentHelmet": false,
+            "needToRentSuit": false,
+            "needToRentGloves": false,
+            "needToRentBoots": false
         }
 
     ]
 
 }
-
-
 
 
 
@@ -105,7 +111,11 @@ function updateDOM(data) {
                 <p> ID: <span >${value.id}</span></p>
                 <p> trackName: ${value.trackName}</p>
                 <p> eventDate: ${value.eventDate}</p>
-                <p> needToRentBike: ${value.needToRentBike}</p>
+                <p> Will you be renting a motorcycle?: ${value.needToRentBike}</p>
+                <p> Will you be renting a helmet: ${value.needToRentHelmet}</p>
+                <p> Will you be renting a leather suit: ${value.needToRentSuit}</p>
+                <p> Will you be renting gloves: ${value.needToRentGloves}</p>
+                <p> Will you be renting boots: ${value.needToRentBoots}</p>
                 <button class="edit-button" type="button">EDIT</button>
                 <button class="delete-button" type="button">DELETE</button><br><br>
             </div>
@@ -115,17 +125,13 @@ function updateDOM(data) {
 }
 
 
-
-
 function getPositionByElement (data, element) {
     let _id = $(element).parent().attr("id")
-    console.log("this is the id:", _id);
 
     let eventArray = data.events;
 
     //returns array with only ids 
     let elementPos = eventArray.map(function (x) { return x.id; }).indexOf(_id);
-    console.log("this is elementPos", elementPos)
 
     return elementPos;
 }
@@ -164,10 +170,8 @@ function editRegisteredEvent() {
         let eventArray = MOCK_REGISTERED_EVENTS.events;
 
         let elementPos = getPositionByElement(this);
-        
-        eventArray[elementPos].needToRentBike = true;
-        console.log(eventArray[elementPos])
 
+        eventArray[elementPos].needToRentBike = true;
         updateDOM(MOCK_REGISTERED_EVENTS);
     })
 
@@ -220,56 +224,130 @@ function registerButtonClickHandler() {
             `
             <form id="registration">
                 First name:<br>
-                <input type="text" name="firstname" value="">
+                <input type="text" name="firstName" value="">
                 <br><br>
                 Last name:<br>
-                <input type="text" name="lastname" value="">
+                <input type="text" name="lastName" value="">
                 <br><br>
                 Will you be renting a motorcycle with us: <br>
-                <input type="radio" name="rental-answer" value="Yes">Yes<br>
-                <input type="radio" name="rental-answer" value="No">No, I will be riding my own motorcylce<br>
+                <input type="radio" name="motorcycleRentalAnswer" value="Yes">Yes<br>
+                <input type="radio" name="motorcycleRentalAnswer" value="No">No, I will be riding my own motorcylce<br>
                 <br><br>
                 If you need to rent safety gear, please select all items you will need to rent: <br>
-                <input type="checkbox" name="Helmet" value="Helmet">Helmet<br>
-                <input type="checkbox" name="Leather-suit" value="Leather Racing Suit">Leather Racing Suit<br>
-                <input type="checkbox" name="Gloves" value="Gloves">Gloves<br>
-                <input type="checkbox" name="Boots" value="Boots">Boots<br>
-
+                <div>
+                    <input type="checkbox" name="gearRental" value="Helmet">
+                    <label for="helmet">Helmet</label>
+                </div>
+                <div>
+                    <input type="checkbox" name="gearRental" value="Leather-Racing-Suit">
+                    <label for="Leather-Racing-Suit">Leather Racing Suit</label>
+                </div>
+                <div>
+                <input type="checkbox" name="gearRental" value="Gloves">
+                <label for="gloves">Gloves</label>
+                </div>
+                <div>
+                <input type="checkbox" name="gearRental" value="Boots">
+                <label for="Boots">Boots</label>
+                <div>
                 <input type="submit" value="Submit">
+                </div>
             </form>
             `
         );
 
-
-        
         let position = getPositionByElement(MOCK_UPCOMING_EVENTS, this)
         MOCK_REGISTERED_EVENTS.events.push(MOCK_UPCOMING_EVENTS.events[position]);
-        
-
-        
 
         //on formsubmit:
-        // store user input in object 
+        // store user input in array
         // append the user input to object in MOCK_UPCOMING)EVENTS.events[position]
 
         
         $("#registration").submit(function (event) {
             event.preventDefault();
             console.log("submit button clicked");
+        
+            let $inputs = $('#registration :input');
+    
+            let values = {};
+          
+            values.firstName = $('input[name=firstName]').val();
+            values.lastName = $('input[name=lastName]').val();
+            values.motorcycleRentalAnswer = $('input[name=motorcycleRentalAnswer]:checked').val();
+            values.gearRental = []
 
-            let userInput = {
+            let gearRentalDOMArray = $('input[name=gearRental]:checked');
 
+            for (let i = 0; i < gearRentalDOMArray.length; i++) {
+                values.gearRental.push(gearRentalDOMArray[i].value);
             }
+           
+
+            //Convert user input into customer-facing language and append to object 
+            mostRecentlyAddedEventPos = MOCK_REGISTERED_EVENTS.events.length - 1;
+            
+            console.log(values);
+
+            //you can insert <p> You have selected to rent the following Items <p> 
+
+            //Motorcycle: values.motorcycleRentalAnswer
+            //Helmet: if "Helmet" is in the array, then Yes. Else "No"
+
+            let helmetAnswer = false;
+            let bootsAnswer = false;
+            let suitAnswer = false;
+            let glovesAnswer = false;
+
+            values.gearRental.forEach(function(gearItem) {
+                if (gearItem === "Helmet") {
+                    helmetAnswer = true;
+                } 
+            });
+
+            values.gearRental.forEach(function (gearItem) {
+                if (gearItem === "Boots") {
+                    bootsAnswer = true;
+                } 
+            });
+             
+            values.gearRental.forEach(function (gearItem) {
+                if (gearItem === "Leather-Racing-Suit") {
+                    suitAnswer = true;
+                } 
+            });
+
+            values.gearRental.forEach(function (gearItem) {
+                if (gearItem === "Gloves") {
+                    glovesAnswer = true;
+                }
+            });
+
+
+            MOCK_REGISTERED_EVENTS.events[mostRecentlyAddedEventPos]['needToRentBike'] = values.motorcycleRentalAnswer;
+            MOCK_REGISTERED_EVENTS.events[mostRecentlyAddedEventPos]['needToRentHelmet'] = helmetAnswer; 
+            MOCK_REGISTERED_EVENTS.events[mostRecentlyAddedEventPos]['needToRentSuit'] = suitAnswer;
+            MOCK_REGISTERED_EVENTS.events[mostRecentlyAddedEventPos]['needToRentGloves'] = glovesAnswer;
+            MOCK_REGISTERED_EVENTS.events[mostRecentlyAddedEventPos]['needToRentBoots'] = bootsAnswer;
+
+            console.log(MOCK_REGISTERED_EVENTS.events)
+        
+            //update DOM 
+            updateDOM(MOCK_REGISTERED_EVENTS);
+
+
+        //Object.assign --> merging objects 
+        //implement edit 
+
+        //API 
+        //Model --> move to server side 
+
+        //don't worry about db yet 
+
 
         });
-
-        
-       
-
-
     });
 }
-
 
 
 
