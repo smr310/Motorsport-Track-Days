@@ -1,51 +1,6 @@
 
-let MOCK_UPCOMING_EVENTS = {
-    "events": [
-        {
-            "id": "aaaaaa",
-            "trackName": "New Hampshire Motor Speedway",
-            "eventDate": "June 1, 2018",
-        },
-        {
-            "id": "bbbbbb",
-            "trackName": "Palmer Motorsports Park",
-            "eventDate": "August 5, 2018",
-        },
-        {
-            "id": "cccccc",
-            "trackName": "Thompson Speedway Motorsports Park",
-            "eventDate": "September 10, 2018",
-        }
 
-    ]
-}
 
-let MOCK_REGISTERED_EVENTS = {
-    "events": [
-        {
-            "id": "111111",
-            "trackName": "New Hampshire Motor Speedway",
-            "eventDate": "June 1, 2018",
-            "needToRentBike": true,
-            "needToRentHelmet": false,
-            "needToRentSuit": false,
-            "needToRentGloves": false,
-            "needToRentBoots": false
-        },
-        {
-            "id": "222222",
-            "trackName": "Palmer Motorsports Park",
-            "eventDate": "August 5, 2018",
-            "needToRentBike": false,
-            "needToRentHelmet": false,
-            "needToRentSuit": false,
-            "needToRentGloves": false,
-            "needToRentBoots": false
-        }
-
-    ]
-
-}
 
 // this function can stay the same even when we
 // are connecting to real API
@@ -58,7 +13,22 @@ function getAndDisplayRegisteredEvents() {
 }
 
 function getRegisteredEvents(callbackFn) {
-    setTimeout(function () { callbackFn(MOCK_REGISTERED_EVENTS) }, 100);
+    $.ajax({
+        type: "GET",
+        url: "http://localhost:8080/registeredEvents",
+        data: {},
+        dataType: 'json',
+        success: function (data) {
+            callbackFn(data) 
+        },
+        error: function (err) {
+            console.log(err)
+        },
+        beforeSend: function (xhr) {
+
+        }
+    });
+    
 }
 
 // this function stays the same when we connect
@@ -98,6 +68,12 @@ function getPositionByElement (data, element) {
 
 
 //DELETE
+
+//logic
+//send server id to delete 
+//server will delete from mock data 
+//sends 200 response so client knows it was deleted successfully
+//client has ability to remove it from the DOM
 
 function deleteRegisteredEvent() {
     $('body').on('click', '.delete-button', function (event) {
@@ -227,12 +203,19 @@ function editRegisteredEvent() {
 }
 
 
-function displayUpcomingEvents(data) {
-    $('.dashboard-div').html("");
+function displayUpcomingEvents() {
+    
+    $.ajax({
+        type: "GET",
+        url: "http://localhost:8080/upcomingEvents",
+        data: {},
+        dataType: 'json',
+        success: function (data) {
+            $('.dashboard-div').html("");
 
-    for (value of data.events) {
-        $('.dashboard-div').append(
-            `
+            for (value of data.events) {
+                $('.dashboard-div').append(
+                    `
             <div id=${value.id}>
                 <p> ID: <span >${value.id}</span></p>
                 <p> trackName: ${value.trackName}</p>
@@ -240,16 +223,27 @@ function displayUpcomingEvents(data) {
                 <button class="register-button" type="button">REGISTER</button>
             </div>
             `
-        );
-    }
+                );
+            }
+            registerButtonClickHandler();
+        },
+        error: function (err) {
+            console.log(err)
+        },
+        beforeSend: function (xhr) {
+           
+        }
+    });
+    
+   
 
-    homePageButtonClickHandler();        
-    registerButtonClickHandler();
+          
+    
 }
 
 function homePageButtonClickHandler() {
     $('body').on('click', '#homepage-button', function (event) {
-        displayUpcomingEvents(MOCK_UPCOMING_EVENTS)
+        displayUpcomingEvents()
     });
 }
 
@@ -384,7 +378,8 @@ function registerButtonClickHandler() {
 
 //on page load do this
 $(function () {
-    displayUpcomingEvents(MOCK_UPCOMING_EVENTS);
+    homePageButtonClickHandler();  
+    displayUpcomingEvents();
     getAndDisplayRegisteredEvents();
     deleteRegisteredEvent();
     editRegisteredEvent();
