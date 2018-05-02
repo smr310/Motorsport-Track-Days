@@ -25,7 +25,7 @@ function getRegisteredEvents(callbackFn) {
             console.log(err)
         },
         beforeSend: function (xhr) {
-
+           
         }
     });
     
@@ -75,32 +75,61 @@ function getPositionByElement (data, element) {
 //sends 200 response so client knows it was deleted successfully
 //client has ability to remove it from the DOM
 
+
 function deleteRegisteredEvent() {
     $('body').on('click', '.delete-button', function (event) {
-       
-        let eventArray = MOCK_REGISTERED_EVENTS.events;
+        
+        let id = $(this).parent().attr('id');
 
-        let elementPos = getPositionByElement(MOCK_REGISTERED_EVENTS, this);
+        $.ajax({
+            type: "DELETE",
+            url: "http://localhost:8080/registeredEvents" + id,
+            data: {},
+            dataType: 'json',
+            success: function (data) {
+                updateDOM(data);
+            },
+            error: function (err) {
+                console.log(err)
+            },
+            beforeSend: function (xhr) {
 
-        let removedEvent = eventArray.splice(elementPos, 1);
-        console.log("removedEvent is:", removedEvent);
-
-        var objectFound = eventArray[elementPos];
-        console.log("this is the remaining event Array:", eventArray);
-
-        MOCK_REGISTERED_EVENTS.registeredEvents = eventArray; 
-        console.log("this is updated Mock Data Array:", MOCK_REGISTERED_EVENTS.registeredEvents)
-
-        updateDOM(MOCK_REGISTERED_EVENTS);
+            }
+        });
     })
 }
 
 
 
-//PUT
+//below is the original deleteRegisteredEvent function which worked for client-side only
+
+// function deleteRegisteredEvent() {
+//     $('body').on('click', '.delete-button', function (event) {
+       
+//         let eventArray = MOCK_REGISTERED_EVENTS.events;
+
+//         let elementPos = getPositionByElement(MOCK_REGISTERED_EVENTS, this);
+
+//         let removedEvent = eventArray.splice(elementPos, 1);
+//         console.log("removedEvent is:", removedEvent);
+
+//         var objectFound = eventArray[elementPos];
+//         console.log("this is the remaining event Array:", eventArray);
+
+//         MOCK_REGISTERED_EVENTS.registeredEvents = eventArray; 
+//         console.log("this is updated Mock Data Array:", MOCK_REGISTERED_EVENTS.registeredEvents)
+
+//         updateDOM(MOCK_REGISTERED_EVENTS);
+//     })
+// }
+
+
+
+//////PUT
+
 function editRegisteredEvent() {
     $('body').on('click', '.edit-button', function (event) {
-        
+
         //ask user for input
         $('.dashboard-div').html("");
 
@@ -134,17 +163,18 @@ function editRegisteredEvent() {
             `
         );
 
+        let id = $(this).parent().attr('id');
+        console.log('this is the id:', id);
 
-        let position = getPositionByElement(MOCK_REGISTERED_EVENTS, this)
-        console.log(position);
-    
         $("#update").submit(function (event) {
             event.preventDefault();
-            console.log("update submit button clicked")
+
+            let values = {
+                motorcycleRentalAnswer: "",
+                gearRental: ""
+            };
 
             let $inputs = $('#update :input');
-
-            let values = {};
 
             values.motorcycleRentalAnswer = $('input[name=motorcycleRentalAnswer]:checked').val();
             values.gearRental = []
@@ -156,103 +186,37 @@ function editRegisteredEvent() {
             }
 
 
-            //Convert user input into customer-facing language and append to object 
-            console.log(values);
+            $.ajax({
+                type: "PUT",
+                url: "http://localhost:8080/registeredEvents" + id,
+                data: JSON.stringify(values),
+                //dataType: 'json',
+                contentType: "application/json",
+                success: function (data) {
+                    getRegisteredEvents(updateDOM)
+                    console.log("this is ajax success function line one");
+                    console.log(data)
+                    //above code does not do anything?
 
-            let helmetAnswer = false;
-            let bootsAnswer = false;
-            let suitAnswer = false;
-            let glovesAnswer = false;
+                },
+                error: function (err) {
+                    console.log(err)
+                },
+                beforeSend: function (xhr) {
 
-            values.gearRental.forEach(function (gearItem) {
-                if (gearItem === "Helmet") {
-                    helmetAnswer = true;
                 }
             });
-
-            values.gearRental.forEach(function (gearItem) {
-                if (gearItem === "Boots") {
-                    bootsAnswer = true;
-                }
-            });
-
-            values.gearRental.forEach(function (gearItem) {
-                if (gearItem === "Leather-Racing-Suit") {
-                    suitAnswer = true;
-                }
-            });
-
-            values.gearRental.forEach(function (gearItem) {
-                if (gearItem === "Gloves") {
-                    glovesAnswer = true;
-                }
-            });
-
-            MOCK_REGISTERED_EVENTS.events[position]['needToRentBike'] = values.motorcycleRentalAnswer;
-            MOCK_REGISTERED_EVENTS.events[position]['needToRentHelmet'] = helmetAnswer;
-            MOCK_REGISTERED_EVENTS.events[position]['needToRentSuit'] = suitAnswer;
-            MOCK_REGISTERED_EVENTS.events[position]['needToRentGloves'] = glovesAnswer;
-            MOCK_REGISTERED_EVENTS.events[position]['needToRentBoots'] = bootsAnswer;
-
-            console.log(MOCK_REGISTERED_EVENTS.events)
-
-            //update DOM 
-            updateDOM(MOCK_REGISTERED_EVENTS);
         });
     })
 }
 
 
-function displayUpcomingEvents() {
-    
-    $.ajax({
-        type: "GET",
-        url: "http://localhost:8080/upcomingEvents",
-        data: {},
-        dataType: 'json',
-        success: function (data) {
-            $('.dashboard-div').html("");
 
-            for (value of data.events) {
-                $('.dashboard-div').append(
-                    `
-            <div id=${value.id}>
-                <p> ID: <span >${value.id}</span></p>
-                <p> trackName: ${value.trackName}</p>
-                <p> eventDate: ${value.eventDate}</p>
-                <button class="register-button" type="button">REGISTER</button>
-            </div>
-            `
-                );
-            }
-            registerButtonClickHandler();
-        },
-        error: function (err) {
-            console.log(err)
-        },
-        beforeSend: function (xhr) {
-           
-        }
-    });
-    
-   
-
-          
-    
-}
-
-function homePageButtonClickHandler() {
-    $('body').on('click', '#homepage-button', function (event) {
-        displayUpcomingEvents()
-    });
-}
-
-
-//POST 
+//////POST 
 
 function registerButtonClickHandler() {
     $('body').on('click', '.register-button', function (event) {
-        
+
         //update DOM to ask for user input 
         $('.dashboard-div').html("");
 
@@ -292,24 +256,21 @@ function registerButtonClickHandler() {
             `
         );
 
-        let position = getPositionByElement(MOCK_UPCOMING_EVENTS, this)
-        MOCK_REGISTERED_EVENTS.events.push(MOCK_UPCOMING_EVENTS.events[position]);
 
-        //on formsubmit:
-        // store user input in array
-        // append the user input to object in MOCK_UPCOMING)EVENTS.events[position]
+        let id = $(this).parent().attr('id');
+        console.log('this is the id:', id);
 
-        
         $("#registration").submit(function (event) {
             event.preventDefault();
-            console.log("submit button clicked");
-        
-            let $inputs = $('#registration :input');
-    
-            let values = {};
-          
-            values.firstName = $('input[name=firstName]').val();
-            values.lastName = $('input[name=lastName]').val();
+            console.log('register button clicked')
+
+            let values = {
+                motorcycleRentalAnswer: "",
+                gearRental: ""
+            };
+
+            let $inputs = $('#update :input');
+
             values.motorcycleRentalAnswer = $('input[name=motorcycleRentalAnswer]:checked').val();
             values.gearRental = []
 
@@ -318,59 +279,70 @@ function registerButtonClickHandler() {
             for (let i = 0; i < gearRentalDOMArray.length; i++) {
                 values.gearRental.push(gearRentalDOMArray[i].value);
             }
-           
 
-            //Convert user input into customer-facing language and append to object 
-            mostRecentlyAddedEventPos = MOCK_REGISTERED_EVENTS.events.length - 1;
-            
-            console.log(values);
 
-            //you can insert <p> You have selected to rent the following Items <p> 
+            $.ajax({
+                type: "POST",
+                url: "http://localhost:8080/registeredEvents" + id,
+                data: JSON.stringify(values),
+                //dataType: 'json',
+                contentType: "application/json",
+                success: function (data) {
+                    getRegisteredEvents(updateDOM)
+                    console.log("this is ajax success function line one");
+                    //console.log(data)
+                    //above code does not do anything?
 
-            //Motorcycle: values.motorcycleRentalAnswer
-            //Helmet: if "Helmet" is in the array, then Yes. Else "No"
+                },
+                error: function (err) {
+                    console.log(err)
+                },
+                beforeSend: function (xhr) {
 
-            let helmetAnswer = false;
-            let bootsAnswer = false;
-            let suitAnswer = false;
-            let glovesAnswer = false;
-
-            values.gearRental.forEach(function(gearItem) {
-                if (gearItem === "Helmet") {
-                    helmetAnswer = true;
-                } 
-            });
-
-            values.gearRental.forEach(function (gearItem) {
-                if (gearItem === "Boots") {
-                    bootsAnswer = true;
-                } 
-            });
-             
-            values.gearRental.forEach(function (gearItem) {
-                if (gearItem === "Leather-Racing-Suit") {
-                    suitAnswer = true;
-                } 
-            });
-
-            values.gearRental.forEach(function (gearItem) {
-                if (gearItem === "Gloves") {
-                    glovesAnswer = true;
                 }
             });
-
-
-            MOCK_REGISTERED_EVENTS.events[mostRecentlyAddedEventPos]['needToRentBike'] = values.motorcycleRentalAnswer;
-            MOCK_REGISTERED_EVENTS.events[mostRecentlyAddedEventPos]['needToRentHelmet'] = helmetAnswer; 
-            MOCK_REGISTERED_EVENTS.events[mostRecentlyAddedEventPos]['needToRentSuit'] = suitAnswer;
-            MOCK_REGISTERED_EVENTS.events[mostRecentlyAddedEventPos]['needToRentGloves'] = glovesAnswer;
-            MOCK_REGISTERED_EVENTS.events[mostRecentlyAddedEventPos]['needToRentBoots'] = bootsAnswer;
-
-            console.log(MOCK_REGISTERED_EVENTS.events)
-        
-            //update DOM 
-            updateDOM(MOCK_REGISTERED_EVENTS);
         });
+    })
+}
+
+
+/////GET
+function displayUpcomingEvents() {
+    
+    $.ajax({
+        type: "GET",
+        url: "http://localhost:8080/upcomingEvents",
+        data: {},
+        dataType: 'json',
+        success: function (data) {
+            $('.dashboard-div').html("");
+
+            for (value of data.events) {
+                $('.dashboard-div').append(
+                    `
+            <div id=${value.id}>
+                <p> ID: <span >${value.id}</span></p>
+                <p> trackName: ${value.trackName}</p>
+                <p> eventDate: ${value.eventDate}</p>
+                <button class="register-button" type="button">REGISTER</button>
+            </div>
+            `
+                );
+            }
+            registerButtonClickHandler();
+        },
+        error: function (err) {
+            console.log(err)
+        },
+        beforeSend: function (xhr) {
+        
+        }
+    });
+}
+
+function homePageButtonClickHandler() {
+    $('body').on('click', '#homepage-button', function (event) {
+        displayUpcomingEvents()
     });
 }
 
@@ -384,9 +356,4 @@ $(function () {
     deleteRegisteredEvent();
     editRegisteredEvent();
 })
-
-
-//home page should show UPCOMING events 
-
-//click a DASHBOARD BUTTON / LINK -- That will generate REGISTERED EVENTS
 

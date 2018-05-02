@@ -1,7 +1,10 @@
 const express = require('express');
-const routes = require('./routes')
+const routes = require('./routes');
+const bodyParser = require('body-parser');
 const app = express();
 app.use(express.static('public'));
+app.use(bodyParser.json());
+//app.use(bodyParser.urlencoded({ extended: true }))
 new routes(app)
 
 const { PORT } = require('./config');
