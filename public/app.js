@@ -1,15 +1,10 @@
 
 
-
-
-// this function can stay the same even when we
-// are connecting to real API
 function getAndDisplayRegisteredEvents() {
     $('#dashboard-button').on('click', function (event) {
         $('.dashboard-div').html("");
         getRegisteredEvents(updateDOM);
     })
-   
 }
 
 function getRegisteredEvents(callbackFn) {
@@ -20,6 +15,7 @@ function getRegisteredEvents(callbackFn) {
         dataType: 'json',
         success: function (data) {
             callbackFn(data) 
+            
         },
         error: function (err) {
             console.log(err)
@@ -31,16 +27,14 @@ function getRegisteredEvents(callbackFn) {
     
 }
 
-// this function stays the same when we connect
-// to real API later
 function updateDOM(data) {
     $('.dashboard-div').html("");
     
     for (value of data.events) {
         $('.dashboard-div').append(
             `
-            <div id=${value.id}>
-                <p> ID: <span >${value.id}</span></p>
+            <div id=${value._id}>
+                <p> ID: <span >${value._id}</span></p>
                 <p> trackName: ${value.trackName}</p>
                 <p> eventDate: ${value.eventDate}</p>
                 <p> Will you be renting a motorcycle?: ${value.needToRentBike}</p>
@@ -67,15 +61,6 @@ function getPositionByElement (data, element) {
 }
 
 
-//DELETE
-
-//logic
-//send server id to delete 
-//server will delete from mock data 
-//sends 200 response so client knows it was deleted successfully
-//client has ability to remove it from the DOM
-
-
 function deleteRegisteredEvent() {
     $('body').on('click', '.delete-button', function (event) {
         
@@ -98,31 +83,6 @@ function deleteRegisteredEvent() {
         });
     })
 }
-
-
-
-//below is the original deleteRegisteredEvent function which worked for client-side only
-
-// function deleteRegisteredEvent() {
-//     $('body').on('click', '.delete-button', function (event) {
-       
-//         let eventArray = MOCK_REGISTERED_EVENTS.events;
-
-//         let elementPos = getPositionByElement(MOCK_REGISTERED_EVENTS, this);
-
-//         let removedEvent = eventArray.splice(elementPos, 1);
-//         console.log("removedEvent is:", removedEvent);
-
-//         var objectFound = eventArray[elementPos];
-//         console.log("this is the remaining event Array:", eventArray);
-
-//         MOCK_REGISTERED_EVENTS.registeredEvents = eventArray; 
-//         console.log("this is updated Mock Data Array:", MOCK_REGISTERED_EVENTS.registeredEvents)
-
-//         updateDOM(MOCK_REGISTERED_EVENTS);
-//     })
-// }
-
 
 
 //////PUT
@@ -185,7 +145,6 @@ function editRegisteredEvent() {
                 values.gearRental.push(gearRentalDOMArray[i].value);
             }
 
-
             $.ajax({
                 type: "PUT",
                 url: "http://localhost:8080/registeredEvents" + id,
@@ -217,7 +176,7 @@ function editRegisteredEvent() {
 function registerButtonClickHandler() {
     $('body').on('click', '.register-button', function (event) {
 
-        //update DOM to ask for user input 
+        //clearn & update DOM to ask for user input 
         $('.dashboard-div').html("");
 
         $('.dashboard-div').append(
@@ -256,13 +215,10 @@ function registerButtonClickHandler() {
             `
         );
 
-
         let id = $(this).parent().attr('id');
-        console.log('this is the id:', id);
-
+       
         $("#registration").submit(function (event) {
             event.preventDefault();
-            console.log('register button clicked')
 
             let values = {
                 motorcycleRentalAnswer: "",
@@ -320,8 +276,8 @@ function displayUpcomingEvents() {
             for (value of data.events) {
                 $('.dashboard-div').append(
                     `
-            <div id=${value.id}>
-                <p> ID: <span >${value.id}</span></p>
+            <div id=${value._id}>
+                <p> ID: <span >${value._id}</span></p>
                 <p> trackName: ${value.trackName}</p>
                 <p> eventDate: ${value.eventDate}</p>
                 <button class="register-button" type="button">REGISTER</button>

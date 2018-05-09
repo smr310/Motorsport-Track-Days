@@ -49,9 +49,8 @@ describe('API resource', function () {
 
                 })
         });
-
-       
-    });
+    
+    })
 
 
 });

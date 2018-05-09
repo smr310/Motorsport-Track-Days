@@ -2,12 +2,23 @@ const express = require('express');
 const routes = require('./routes');
 const bodyParser = require('body-parser');
 const app = express();
+const mongoose = require('mongoose');
+
+
+// Mongoose internally uses a promise-like object,
+// but it's better to make Mongoose use built in es6 promises
+mongoose.Promise = global.Promise;
+
+// config.js is where we control constants for entire
+// app like PORT and DATABASE_URL
+const { PORT, DATABASE_URL } = require('./config');
+
+
+
 app.use(express.static('public'));
 app.use(bodyParser.json());
-//app.use(bodyParser.urlencoded({ extended: true }))
-new routes(app)
 
-const { PORT } = require('./config');
+new routes(app)
 
 
 // closeServer needs access to a server object, but that only
@@ -15,19 +26,35 @@ const { PORT } = require('./config');
 // and then assign a value to it in run
 let server;
 
-// this function connects to our database, then starts the server
-function runServer(port = PORT) {
+function runServer(databaseUrl, port = PORT) {
     return new Promise((resolve, reject) => {
-        server = app.listen(port, () => {
-            console.log(`Your app is listening on port ${port}`);
-            resolve();
-        })
-        .on('error', err => {
-            reject(err);
+        console.log('this is the db URL: ', databaseUrl);
+        mongoose.connect(databaseUrl, err => {
+            if (err) {
+                return reject(err);
+            }
+
+            server = app.listen(port, () => {
+                // let doc = new UpcomingEvent({
+                //     trackName: "test track",
+                //     eventDate: Date.now()
+                // })
+                // doc.save(function (err, docs) {
+                //     if (!err) {
+                //         console.log("abc");
+                //         console.log(docs);
+                //     } else { throw err; }
+                // });
+                console.log(`Your app is listening on port ${port}`);
+                resolve();
+            })
+                .on('error', err => {
+                    mongoose.disconnect();
+                    reject(err);
+                });
         });
     });
 }
-
 
 // this function closes the server, and returns a promise. we'll
 // use it in our integration tests later.
@@ -43,6 +70,6 @@ function closeServer() {
     });
 }
 
-if (require.main === module) { runServer().catch(err => console.error(err)); }
+if (require.main === module) { runServer(DATABASE_URL).catch(err => console.error(err)); }
 
 module.exports = { runServer, app, closeServer };
