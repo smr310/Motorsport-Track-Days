@@ -237,9 +237,28 @@ function registerButtonClickHandler() {
             }
 
 
+            //adding this new ajax call to GET by Id
+            
+            // $.ajax({
+            //     type: "GET",
+            //     url: "http://localhost:8080/upcomingEvents" + id,
+            //     data: {},
+            //     dataType: 'json',
+            //     success: function (data) {
+            //         console.log("*** inside ajax success function ***");
+            //     },
+            //     error: function (err) {
+            //         console.log(err)
+            //     },
+            //     beforeSend: function (xhr) {
+            //     }
+            // });
+
+
+
             $.ajax({
                 type: "POST",
-                url: "http://localhost:8080/registeredEvents" + id,
+                url: "http://localhost:8080/registeredEvents/",
                 data: JSON.stringify(values),
                 //dataType: 'json',
                 contentType: "application/json",

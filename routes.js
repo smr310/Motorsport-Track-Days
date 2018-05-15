@@ -51,7 +51,7 @@ function routes (app) {
     app.get('/upcomingEvents', (req, res) => {
         UpcomingEvent.find(function (err, docs) {
             if (!err) {
-                console.log(docs);
+                //console.log(docs);
 
                 let myObj = {
                     events: docs
@@ -66,7 +66,7 @@ function routes (app) {
     app.get('/registeredEvents', (req, res) => {
         RegisteredEvent.find(function (err, docs) {
             if (!err) {
-                console.log(docs);
+                //console.log(docs);
 
                 let myObj = {
                     events: docs
@@ -76,18 +76,96 @@ function routes (app) {
         });
     })
 
-    app.delete('/registeredEvents:id', (req, res) => {
-        let id = req.params.id;
-        let found = false; 
+ 
+    //find the UpcomingEvent by id 
+    //need this to execute on the register click
 
-        MOCK_REGISTERED_EVENTS.events.forEach(function(event, index) {
-            if (!found && event.id === id) {
-                MOCK_REGISTERED_EVENTS.events.splice(index, 1);
-            }
+    app.get('/upcomingEvents/:id', (req, res) => {
+        UpcomingEvent.findyById('5aea086e734d1d06be086b45').then(function (err, docs) {
+            if (!err) {
+                console.log("***", docs);
+
+                // let myObj = {
+                //     events: docs
+                // }
+                // res.send(myObj)
+            } else { throw err; }
         })
-        
-        res.send(MOCK_REGISTERED_EVENTS);
+
+
     })
+
+    
+    app.post('/registeredEvents:id', (req, res) => {
+        
+        
+        //store the necessary info into newly declared variables
+        //declare/define all other variables 
+        //RegisteredEvent.create() as is 
+        
+        console.log('this is working')
+
+        trackName = "the best track in the world";
+        
+        RegisteredEvent.create({
+            trackName: trackName,
+            eventDate: new Date(),
+            needToRentBike: true,
+            needToRentHelmet: true,
+            needToRentSuit: true,
+            needToRentGloves: true,
+            needToRentBoots: true
+        }).then(function(err, docs) {
+            if (!err) {
+                console.log(docs);
+
+                let myObj = {
+                    events: docs
+                }
+                res.send(myObj)
+            } else { throw err; }
+        })
+
+
+    //     let id = req.params.id
+    //     let values = req.body
+    //     let registeredEventIndex = findById(id, MOCK_UPCOMING_EVENTS.events)
+
+    //     let upcomingObject = Object.assign({}, MOCK_UPCOMING_EVENTS.events[registeredEventIndex])
+
+    //     MOCK_REGISTERED_EVENTS.events.push(upcomingObject)
+
+    //     //this is the index of the registered event within the MOCK_REGISTERED_EVENTS.events array
+    //     let _index = MOCK_REGISTERED_EVENTS.events.length - 1
+        
+    //     MOCK_REGISTERED_EVENTS.events[_index].needToRentHelmet = false;
+    //     MOCK_REGISTERED_EVENTS.events[_index].needToRentBoots = false;
+    //     MOCK_REGISTERED_EVENTS.events[_index].needToRentGloves = false;
+    //     MOCK_REGISTERED_EVENTS.events[_index].needToRentSuit = false;
+
+    //     if (values.motorcycleRentalAnswer === 'Yes') {
+    //         MOCK_REGISTERED_EVENTS.events[_index].needToRentBike = true;
+    //     } else {
+    //         MOCK_REGISTERED_EVENTS.events[_index].needToRentBike = false;
+    //     }
+
+    //     values.gearRental.forEach((item) => {
+    //         if (item === 'Helmet') {
+    //             MOCK_REGISTERED_EVENTS.events[_index].needToRentHelmet = true
+    //         } else if (item === 'Boots') {
+    //             MOCK_REGISTERED_EVENTS.events[_index].needToRentBoots = true
+    //         } else if (item === 'Gloves') {
+    //             MOCK_REGISTERED_EVENTS.events[_index].needToRentGloves = true
+    //         } else if (item === 'Leather-Racing-Suit') {
+    //             MOCK_REGISTERED_EVENTS.events[_index].needToRentSuit = true
+    //         }
+    //     });
+
+    //     res.end();
+
+
+    })
+
 
     app.put('/registeredEvents:id', (req, res) => {
         let id = req.params.id
@@ -99,7 +177,7 @@ function routes (app) {
         } else {
             MOCK_REGISTERED_EVENTS.events[changedEventIndex].needToRentBike = false;
         }
-        
+
         values.gearRental.forEach((item) => {
             if (item === 'Helmet') {
                 MOCK_REGISTERED_EVENTS.events[changedEventIndex].needToRentHelmet = true
@@ -115,45 +193,21 @@ function routes (app) {
         res.end();
     })
 
-    app.post('/registeredEvents:id', (req, res) => {
-        let id = req.params.id
-        let values = req.body
-        let registeredEventIndex = findById(id, MOCK_UPCOMING_EVENTS.events)
 
-        let upcomingObject = Object.assign({}, MOCK_UPCOMING_EVENTS.events[registeredEventIndex])
+    app.delete('/registeredEvents:id', (req, res) => {
+        let id = req.params.id;
+        let found = false;
 
-        MOCK_REGISTERED_EVENTS.events.push(upcomingObject)
-
-        
-
-        //this is the index of the registered event within the MOCK_REGISTERED_EVENTS.events array
-        let _index = MOCK_REGISTERED_EVENTS.events.length - 1
-        
-        MOCK_REGISTERED_EVENTS.events[_index].needToRentHelmet = false;
-        MOCK_REGISTERED_EVENTS.events[_index].needToRentBoots = false;
-        MOCK_REGISTERED_EVENTS.events[_index].needToRentGloves = false;
-        MOCK_REGISTERED_EVENTS.events[_index].needToRentSuit = false;
-
-        if (values.motorcycleRentalAnswer === 'Yes') {
-            MOCK_REGISTERED_EVENTS.events[_index].needToRentBike = true;
-        } else {
-            MOCK_REGISTERED_EVENTS.events[_index].needToRentBike = false;
-        }
-
-        values.gearRental.forEach((item) => {
-            if (item === 'Helmet') {
-                MOCK_REGISTERED_EVENTS.events[_index].needToRentHelmet = true
-            } else if (item === 'Boots') {
-                MOCK_REGISTERED_EVENTS.events[_index].needToRentBoots = true
-            } else if (item === 'Gloves') {
-                MOCK_REGISTERED_EVENTS.events[_index].needToRentGloves = true
-            } else if (item === 'Leather-Racing-Suit') {
-                MOCK_REGISTERED_EVENTS.events[_index].needToRentSuit = true
+        MOCK_REGISTERED_EVENTS.events.forEach(function (event, index) {
+            if (!found && event.id === id) {
+                MOCK_REGISTERED_EVENTS.events.splice(index, 1);
             }
-        });
+        })
 
-        res.end();
+        res.send(MOCK_REGISTERED_EVENTS);
     })
+
+
 }
 
 
