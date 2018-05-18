@@ -72,7 +72,8 @@ function deleteRegisteredEvent() {
             data: {},
             dataType: 'json',
             success: function (data) {
-                updateDOM(data);
+                //updateDOM(data);
+                getRegisteredEvents(updateDOM)
             },
             error: function (err) {
                 console.log(err)
@@ -216,11 +217,18 @@ function registerButtonClickHandler() {
         );
 
         let id = $(this).parent().attr('id');
+        let trackName = $($(this).parent().find('p')[1]).html();
+        let trackNameString = trackName.split("trackName: ")[1]
+        let eventDate = $($(this).parent().find('p')[2]).html();
+        let eventDateString = eventDate.split("eventDate: ")[1];
+        
        
         $("#registration").submit(function (event) {
             event.preventDefault();
 
             let values = {
+                trackName: trackNameString,
+                eventDate: eventDateString,
                 motorcycleRentalAnswer: "",
                 gearRental: ""
             };
@@ -236,29 +244,9 @@ function registerButtonClickHandler() {
                 values.gearRental.push(gearRentalDOMArray[i].value);
             }
 
-
-            //adding this new ajax call to GET by Id
-            
-            // $.ajax({
-            //     type: "GET",
-            //     url: "http://localhost:8080/upcomingEvents" + id,
-            //     data: {},
-            //     dataType: 'json',
-            //     success: function (data) {
-            //         console.log("*** inside ajax success function ***");
-            //     },
-            //     error: function (err) {
-            //         console.log(err)
-            //     },
-            //     beforeSend: function (xhr) {
-            //     }
-            // });
-
-
-
             $.ajax({
                 type: "POST",
-                url: "http://localhost:8080/registeredEvents/",
+                url: "http://localhost:8080/registeredEvents/" + id,
                 data: JSON.stringify(values),
                 //dataType: 'json',
                 contentType: "application/json",

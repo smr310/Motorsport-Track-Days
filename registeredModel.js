@@ -6,11 +6,11 @@ const mongoose = require('mongoose');
 const registeredEventSchema = mongoose.Schema({
     trackName: { type: String, required: true },
     eventDate: { type: Date, required: true },
-    needToRentBike: { type: Boolean, required: true },
-    needToRentHelmet: { type: Boolean, required: true },
-    needToRentSuit: { type: Boolean, required: true },
-    needToRentGloves: { type: Boolean, required: true },
-    needToRentBoots: { type: Boolean, required: true }
+    needToRentBike: { type: Boolean },
+    needToRentHelmet: { type: Boolean },
+    needToRentSuit: { type: Boolean },
+    needToRentGloves: { type: Boolean },
+    needToRentBoots: { type: Boolean }
 });
 
 // *virtuals* (http://mongoosejs.com/docs/guide.html#virtuals)

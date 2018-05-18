@@ -96,98 +96,104 @@ function routes (app) {
     })
 
     
-    app.post('/registeredEvents:id', (req, res) => {
+    app.post('/registeredEvents/:id', (req, res) => {
         
         
         //store the necessary info into newly declared variables
         //declare/define all other variables 
         //RegisteredEvent.create() as is 
         
-        console.log('this is working')
+        console.log(req.body)
 
-        trackName = "the best track in the world";
-        
+        console.log('here is the track name: ', req.body.trackName)
+
+
+        let needToRentBike = false;
+        let needToRentHelmet = false;
+        let needToRentBoots = false;
+        let needToRentGloves = false;
+        let needToRentSuit = false;
+
+        if (req.body.motorcycleRentalAnswer === 'Yes') {
+            needToRentBike = true;
+        } else {
+            needToRentBike = false;
+        }
+
+        req.body.gearRental.forEach((item) => {
+            if (item === 'Helmet') {
+                needToRentHelmet = true
+            } else if (item === 'Boots') {
+                needToRentBoots = true
+            } else if (item === 'Gloves') {
+                needToRentGloves = true
+            } else if (item === 'Leather-Racing-Suit') {
+               needToRentSuit = true
+            }
+        });
+
+
+            
+
+
+
+
         RegisteredEvent.create({
-            trackName: trackName,
-            eventDate: new Date(),
-            needToRentBike: true,
-            needToRentHelmet: true,
-            needToRentSuit: true,
-            needToRentGloves: true,
-            needToRentBoots: true
-        }).then(function(err, docs) {
-            if (!err) {
+            trackName: req.body.trackName,
+            eventDate: req.body.eventDate,
+            needToRentBike: needToRentBike,
+            needToRentHelmet: needToRentHelmet,
+            needToRentSuit: needToRentSuit,
+            needToRentGloves: needToRentGloves,
+            needToRentBoots: needToRentBoots
+        }).then(function(docs) {
+            
                 console.log(docs);
 
                 let myObj = {
                     events: docs
                 }
                 res.send(myObj)
-            } else { throw err; }
         })
-
-
-    //     let id = req.params.id
-    //     let values = req.body
-    //     let registeredEventIndex = findById(id, MOCK_UPCOMING_EVENTS.events)
-
-    //     let upcomingObject = Object.assign({}, MOCK_UPCOMING_EVENTS.events[registeredEventIndex])
-
-    //     MOCK_REGISTERED_EVENTS.events.push(upcomingObject)
-
-    //     //this is the index of the registered event within the MOCK_REGISTERED_EVENTS.events array
-    //     let _index = MOCK_REGISTERED_EVENTS.events.length - 1
-        
-    //     MOCK_REGISTERED_EVENTS.events[_index].needToRentHelmet = false;
-    //     MOCK_REGISTERED_EVENTS.events[_index].needToRentBoots = false;
-    //     MOCK_REGISTERED_EVENTS.events[_index].needToRentGloves = false;
-    //     MOCK_REGISTERED_EVENTS.events[_index].needToRentSuit = false;
-
-    //     if (values.motorcycleRentalAnswer === 'Yes') {
-    //         MOCK_REGISTERED_EVENTS.events[_index].needToRentBike = true;
-    //     } else {
-    //         MOCK_REGISTERED_EVENTS.events[_index].needToRentBike = false;
-    //     }
-
-    //     values.gearRental.forEach((item) => {
-    //         if (item === 'Helmet') {
-    //             MOCK_REGISTERED_EVENTS.events[_index].needToRentHelmet = true
-    //         } else if (item === 'Boots') {
-    //             MOCK_REGISTERED_EVENTS.events[_index].needToRentBoots = true
-    //         } else if (item === 'Gloves') {
-    //             MOCK_REGISTERED_EVENTS.events[_index].needToRentGloves = true
-    //         } else if (item === 'Leather-Racing-Suit') {
-    //             MOCK_REGISTERED_EVENTS.events[_index].needToRentSuit = true
-    //         }
-    //     });
-
-    //     res.end();
-
-
     })
 
 
     app.put('/registeredEvents:id', (req, res) => {
-        let id = req.params.id
-        let values = req.body
-        let changedEventIndex = findById(id, MOCK_REGISTERED_EVENTS.events)
 
-        if (values.motorcycleRentalAnswer === 'Yes') {
-            MOCK_REGISTERED_EVENTS.events[changedEventIndex].needToRentBike = true;
+        let id = req.params.id
+
+        let needToRentBike = false;
+        let needToRentHelmet = false;
+        let needToRentBoots = false;
+        let needToRentGloves = false;
+        let needToRentSuit = false;
+
+        if (req.body.motorcycleRentalAnswer === 'Yes') {
+            needToRentBike = true;
         } else {
-            MOCK_REGISTERED_EVENTS.events[changedEventIndex].needToRentBike = false;
+            needToRentBike = false;
         }
 
-        values.gearRental.forEach((item) => {
+        req.body.gearRental.forEach((item) => {
             if (item === 'Helmet') {
-                MOCK_REGISTERED_EVENTS.events[changedEventIndex].needToRentHelmet = true
+                needToRentHelmet = true
             } else if (item === 'Boots') {
-                MOCK_REGISTERED_EVENTS.events[changedEventIndex].needToRentBoots = true
+                needToRentBoots = true
             } else if (item === 'Gloves') {
-                MOCK_REGISTERED_EVENTS.events[changedEventIndex].needToRentGloves = true
+                needToRentGloves = true
             } else if (item === 'Leather-Racing-Suit') {
-                MOCK_REGISTERED_EVENTS.events[changedEventIndex].needToRentSuit = true
+                needToRentSuit = true
             }
+        });
+
+        RegisteredEvent.findByIdAndUpdate(id, {
+            needToRentBike: needToRentBike,
+            needToRentHelmet: needToRentHelmet,
+            needToRentBoots: needToRentBoots,
+            needToRentGloves: needToRentGloves,
+            needToRentSuit: needToRentSuit
+        }).then(function(doc) {
+            
         });
 
         res.end();
@@ -196,15 +202,34 @@ function routes (app) {
 
     app.delete('/registeredEvents:id', (req, res) => {
         let id = req.params.id;
-        let found = false;
+        console.log('this is the id', id)
+        
+        RegisteredEvent.findByIdAndRemove(id)
+            .then(function(doc, docs) {
+                doc.remove
+                
+                let myObj = {
+                    events: docs
+                }
+                res.send(myObj)
+            });
 
-        MOCK_REGISTERED_EVENTS.events.forEach(function (event, index) {
-            if (!found && event.id === id) {
-                MOCK_REGISTERED_EVENTS.events.splice(index, 1);
-            }
-        })
 
-        res.send(MOCK_REGISTERED_EVENTS);
+
+        //below worked
+        //RegisteredEvent.findOne({ trackName: 'New Hampshire Motor Speedway'}).then(doc => doc.remove())
+
+
+
+        // let found = false;
+
+        // MOCK_REGISTERED_EVENTS.events.forEach(function (event, index) {
+        //     if (!found && event.id === id) {
+        //         MOCK_REGISTERED_EVENTS.events.splice(index, 1);
+        //     }
+        // })
+
+        // res.send(MOCK_REGISTERED_EVENTS);
     })
 
 
