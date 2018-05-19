@@ -1,6 +1,7 @@
 
 
 //registration 
+
 $('.js-register-form').submit(function (event) {
     event.preventDefault();
     
@@ -19,33 +20,21 @@ $('.js-register-form').submit(function (event) {
     })
         .done(function (user) {
             $('.input').val("");
-            //$('.register-alert').html("");
-            // $('.register-alert').html(`
-            //         <p class="landing-alert">New account created. Please login :-) </p>
-            //     `);
+            ajaxAuthCall();
         })
         .fail(function (error) {
             $('.input').val("");
             console.log(error);
-            // $('.register-alert').html("");
-            // $('.register-alert').html(`
-            //         <p class="landing-alert">${error.responseJSON.message}</p>
-            //     `);
+            $('.register-alert').html("");
+            $('.register-alert').html(`
+                    <p class="landing-alert">${error.responseJSON.message}</p>
+                `);
         })
 
-});
-
-//login existing user
-$('.js-login-form').submit(function (event) {
-    event.preventDefault();
-
-    let userData = {}
-    userData.username = $('.js-login-form .inputUsername').val()
-    userData.password = $('.js-login-form .inputPassword').val()
-
+function ajaxAuthCall() {
     $.ajax({
         type: "POST",
-        headers: {'Content-Type': 'application/json'},
+        headers: { 'Content-Type': 'application/json' },
         //contentType: 'application/json',
         url: '/api/auth/login',
         data: JSON.stringify(userData)
@@ -54,7 +43,8 @@ $('.js-login-form').submit(function (event) {
             $('.input').val("");
             console.log('token', user)
             localStorage.setItem('token', user.authToken);
-             //localStorage.setItem('userID', user.data.userID);
+            displayUpcomingEvents()
+            //localStorage.setItem('userID', user.data.userID);
             //window.location.href = 'home.html'; //directs to home pg
         })
         .fail(function (error) {
@@ -63,7 +53,55 @@ $('.js-login-form').submit(function (event) {
             //         <p class="landing-alert">${error.responseJSON.message}</p>
             //     `);
         })
+}
+    
 
+
+});
+
+//login existing user
+
+function logInExisting(ajaxAuthCall) {
+    $('.js-login-form').submit(function (event) {
+        event.preventDefault();
+
+        let userData = {}
+        userData.username = $('.js-login-form .inputUsername').val()
+        userData.password = $('.js-login-form .inputPassword').val()
+
+        $.ajax({
+            type: "POST",
+            headers: { 'Content-Type': 'application/json' },
+            //contentType: 'application/json',
+            url: '/api/auth/login',
+            data: JSON.stringify(userData)
+        })
+            .done(function (user) {
+                $('.input').val("");
+                console.log('token', user)
+                localStorage.setItem('token', user.authToken);
+                displayUpcomingEvents()
+                //localStorage.setItem('userID', user.data.userID);
+                //window.location.href = 'home.html'; //directs to home pg
+            })
+            .fail(function (error) {
+                $('.input').val("");
+                $('.login-alert').html(`
+                        <p class="landing-alert">This username & password combination is not valid</p>
+                    `);
+            })
+       
+
+    });
+}
+logInExisting();
+
+
+
+$('#signout').on('click', event => {
+    event.preventDefault();
+    localStorage.clear();
+    window.location.href = 'index.html';
 });
 
 
