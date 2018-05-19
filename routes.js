@@ -1,5 +1,4 @@
 let UpcomingEvent = require('./upcomingModel').UpcomingEvent;
-
 let RegisteredEvent = require('./registeredModel').RegisteredEvent;
 
 // let MOCK_UPCOMING_EVENTS = {
@@ -47,8 +46,12 @@ let RegisteredEvent = require('./registeredModel').RegisteredEvent;
 //     ]
 // }
 
+const passport = require('passport');
+const jwtAuth = passport.authenticate('jwt', { session: false });
+
 function routes (app) {
-    app.get('/upcomingEvents', (req, res) => {
+
+    app.get('/upcomingEvents', jwtAuth, (req, res) => {
         UpcomingEvent.find(function (err, docs) {
             if (!err) {
                 //console.log(docs);
@@ -63,7 +66,7 @@ function routes (app) {
         
     })
 
-    app.get('/registeredEvents', (req, res) => {
+    app.get('/registeredEvents', jwtAuth, (req, res) => {
         RegisteredEvent.find(function (err, docs) {
             if (!err) {
                 //console.log(docs);

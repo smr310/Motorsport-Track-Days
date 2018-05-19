@@ -1,5 +1,111 @@
 
 
+//registration 
+$('.js-register-form').submit(function (event) {
+    event.preventDefault();
+    
+    let userData = {}
+    
+    userData.firstName = $('.inputFirstName').val()
+    userData.lastName = $('.inputLastName').val()
+    userData.username = $('.inputUsername').val()
+    userData.password = $('.inputPassword').val()
+    
+    $.ajax({
+        type: "POST",
+        contentType: 'application/json',
+        url: '/api/users',
+        data: JSON.stringify(userData)
+    })
+        .done(function (user) {
+            $('.input').val("");
+            //$('.register-alert').html("");
+            // $('.register-alert').html(`
+            //         <p class="landing-alert">New account created. Please login :-) </p>
+            //     `);
+        })
+        .fail(function (error) {
+            $('.input').val("");
+            console.log(error);
+            // $('.register-alert').html("");
+            // $('.register-alert').html(`
+            //         <p class="landing-alert">${error.responseJSON.message}</p>
+            //     `);
+        })
+
+});
+
+//login existing user
+$('.js-login-form').submit(function (event) {
+    event.preventDefault();
+
+    let userData = {}
+    userData.username = $('.js-login-form .inputUsername').val()
+    userData.password = $('.js-login-form .inputPassword').val()
+
+    $.ajax({
+        type: "POST",
+        headers: {'Content-Type': 'application/json'},
+        //contentType: 'application/json',
+        url: '/api/auth/login',
+        data: JSON.stringify(userData)
+    })
+        .done(function (user) {
+            $('.input').val("");
+            console.log('token', user)
+            localStorage.setItem('token', user.authToken);
+             //localStorage.setItem('userID', user.data.userID);
+            //window.location.href = 'home.html'; //directs to home pg
+        })
+        .fail(function (error) {
+            // $('.input').val("");
+            // $('.login-alert').html(`
+            //         <p class="landing-alert">${error.responseJSON.message}</p>
+            //     `);
+        })
+
+});
+
+
+
+/////GET
+function displayUpcomingEvents() {
+
+    $.ajax({
+        type: "GET",
+        url: "http://localhost:8080/upcomingEvents",
+        headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` },
+        data: {},
+        dataType: 'json',
+        success: function (data) {
+            $('.dashboard-div').html("");
+
+            for (value of data.events) {
+                $('.dashboard-div').append(
+                    `
+            <div id=${value._id}>
+                <p> ID: <span >${value._id}</span></p>
+                <p> trackName: ${value.trackName}</p>
+                <p> eventDate: ${value.eventDate}</p>
+                <button class="register-button" type="button">REGISTER</button>
+            </div>
+            `
+                );
+            }
+            registerButtonClickHandler();
+        },
+        error: function (err) {
+            console.log(err)
+        },
+        beforeSend: function (xhr) {
+
+        }
+    });
+}
+
+
+
+
 function getAndDisplayRegisteredEvents() {
     $('#dashboard-button').on('click', function (event) {
         $('.dashboard-div').html("");
@@ -11,6 +117,7 @@ function getRegisteredEvents(callbackFn) {
     $.ajax({
         type: "GET",
         url: "http://localhost:8080/registeredEvents",
+        headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` },
         data: {},
         dataType: 'json',
         success: function (data) {
@@ -269,45 +376,14 @@ function registerButtonClickHandler() {
 }
 
 
-/////GET
-function displayUpcomingEvents() {
-    
-    $.ajax({
-        type: "GET",
-        url: "http://localhost:8080/upcomingEvents",
-        data: {},
-        dataType: 'json',
-        success: function (data) {
-            $('.dashboard-div').html("");
 
-            for (value of data.events) {
-                $('.dashboard-div').append(
-                    `
-            <div id=${value._id}>
-                <p> ID: <span >${value._id}</span></p>
-                <p> trackName: ${value.trackName}</p>
-                <p> eventDate: ${value.eventDate}</p>
-                <button class="register-button" type="button">REGISTER</button>
-            </div>
-            `
-                );
-            }
-            registerButtonClickHandler();
-        },
-        error: function (err) {
-            console.log(err)
-        },
-        beforeSend: function (xhr) {
-        
-        }
-    });
-}
 
 function homePageButtonClickHandler() {
     $('body').on('click', '#homepage-button', function (event) {
         displayUpcomingEvents()
     });
 }
+
 
 
 
@@ -318,5 +394,6 @@ $(function () {
     getAndDisplayRegisteredEvents();
     deleteRegisteredEvent();
     editRegisteredEvent();
+
 })
 

@@ -5,9 +5,8 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>Index</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <!-- <link rel="stylesheet" type="text/css" media="screen" href="main.css" /> -->
+    <!-- <link rel="stylesheet" type="text/css" media="screen" href="index.css" /> -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-    <script src="app.js"></script>
 </head>
 <body>
     <h1>Steve's Track Days</h1>
@@ -15,6 +14,71 @@
     <button id="dashboard-button">REGISTERED EVENTS</button>
     <div class="dashboard-div"></div>
     
+    <div class="container ">
+        <div class="signup-tab">Sign Up</div>
+        <div class="login-tab">Log In</div>
+        <div class="register-form">
+            <form role="form" class="js-register-form">
+                <fieldset>
+                    <legend>Sign Up</legend>
+                    <label for="inputFirstName">First Name
+                        <span class="required">*</span>
+                    </label>
+                    <input type="text" class="inputFirstName input" placeholder="" required />
+                    <br/>
+                    <label for="inputLastName">Last Name
+                        <span class="required">*</span>
+                    </label>
+                    <input type="text" class="inputLastName input" placeholder="" required />
+                    <br/>
+                    <label for="inputUsername">Username
+                        <span class="required">*</span>
+                    </label>
+                    <input type="text" class="inputUsername input" placeholder="" required />
+                    <br/>
+                    <label for="inputPassword">Password
+                        <span class="required">*</span>
+                        <span class="characters">&nbsp; Must be at least 6 characters long.</span>
+                    </label>
+                    <input type="password" class="inputPassword input" placeholder="" required />
+                    <br/>
+                    <div class="register-alert"></div>
+                    <br/>
+                    <button type="submit" class="create-account-btn">Create Account</button>
+                </fieldset>
+            </form>
+        </div>
+        <div class="login-form">
+            <form role="form" class="js-login-form">
+                <fieldset>
+                    <legend>Register</legend>
+                    <label for="inputUsername">Username
+                        <span class="required">*</span>
+                    </label>
+                    <input type="text" class="inputUsername input" placeholder="" required/>
+                    <br/>
+                    <label for="inputPassword">Password
+                        <span class="required">*</span>
+                    </label>
+                    <input type="password" class="inputPassword input" placeholder="" required />
+                    <br/>
+                    <div class="login-alert"></div>
+                    <br/>
+                    <div class="demo-cred">
+                        <p class="demo-hdr">Demo Credentials</p>
+                        <p class="demo-username">Username:&nbsp;
+                            <span class="demo">demo-user</span>
+                        </p>
+                        <p class="demo-pass">Password:&nbsp;
+                            <span class="demo">123456</span>
+                        </p>
+                    </div>
+                    <button type="submit" class="login-btn">log in</button>
+                </fieldset>
+            </form>
+        </div>
+    </div>
+    <script src="app.js"></script>
 </body>
 </html>
 

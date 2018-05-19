@@ -4,5 +4,5 @@ exports.DATABASE_URL = process.env.DATABASE_URL || 'mongodb://dbuser1:dbpw1@ds22
 //exports.TEST_DATABASE_URL = process.env.TEST_DATABASE_URL || 'mongodb://localhost/test-blog-app';
 exports.PORT = process.env.PORT || 8080;
 
-
-//mongodb://<dbuser>:<dbpassword>@ds99999.mlab.com:9999/node-restaurants-app
+exports.JWT_SECRET = process.env.JWT_SECRET;
+exports.JWT_EXPIRY = process.env.JWT_EXPIRY || '7d';
