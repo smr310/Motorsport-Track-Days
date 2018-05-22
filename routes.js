@@ -114,6 +114,7 @@ function routes (app) {
             }
         });
 
+        
         RegisteredEvent.create({
             trackName: req.body.trackName,
             eventDate: req.body.eventDate,
