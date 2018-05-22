@@ -8,9 +8,9 @@ const router = express.Router();
 
 const jsonParser = bodyParser.json({ extended: true });
 
-// Post to register a new user
+// POST REQUEST to register a new user
 router.post('/', jsonParser, (req, res) => {
-    console.log(req.body);
+    console.log('This is req.body from the register AJAX call', req.body);
     const requiredFields = ['username', 'password'];
     const missingField = requiredFields.find(field => !(field in req.body));
 

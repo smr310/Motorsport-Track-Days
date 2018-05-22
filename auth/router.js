@@ -19,9 +19,13 @@ const localAuth = passport.authenticate('local', { session: false });
 router.use(bodyParser.json());
 // The user provides a username and password to login
 router.post('/login', localAuth, (req, res) => {
-    console.log('auth route working: ', req.body, req.user)
+    console.log('this is req.body from the Auth AJAX POST request: ', req.body)
+    console.log('this is req.user from the Auth AJAX POST request: ', req.user)
     const authToken = createAuthToken(req.user.serialize());
-    res.json({ authToken });
+    const userID = req.user._id
+    console.log('this is authtoken:.', authToken);
+    console.log('this is userID', userID);
+    res.json({ authToken, userID });
 
 });
 

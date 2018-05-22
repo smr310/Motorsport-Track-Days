@@ -1,6 +1,7 @@
 
 
-//registration 
+//REGISTER New User
+//AJAX POST Request
 
 $('.js-register-form').submit(function (event) {
     event.preventDefault();
@@ -31,36 +32,31 @@ $('.js-register-form').submit(function (event) {
                 `);
         })
 
-function ajaxAuthCall() {
-    $.ajax({
-        type: "POST",
-        headers: { 'Content-Type': 'application/json' },
-        //contentType: 'application/json',
-        url: '/api/auth/login',
-        data: JSON.stringify(userData)
-    })
-        .done(function (user) {
-            $('.input').val("");
-            console.log('token', user)
-            localStorage.setItem('token', user.authToken);
-            displayUpcomingEvents()
-            //localStorage.setItem('userID', user.data.userID);
-            //window.location.href = 'home.html'; //directs to home pg
+    function ajaxAuthCall() {
+        $.ajax({
+            type: "POST",
+            headers: { 'Content-Type': 'application/json' },
+            //contentType: 'application/json',
+            url: '/api/auth/login',
+            data: JSON.stringify(userData)
         })
-        .fail(function (error) {
-            // $('.input').val("");
-            // $('.login-alert').html(`
-            //         <p class="landing-alert">${error.responseJSON.message}</p>
-            //     `);
-        })
-}
-    
-
-
+            .done(function (user) {
+                $('.input').val("");
+                localStorage.setItem('token', user.authToken);
+                localStorage.setItem('userID', user.userID);
+                displayUpcomingEvents()
+                //window.location.href = 'home.html'; //directs to home pg
+            })
+            .fail(function (error) {
+                // $('.input').val("");
+                // $('.login-alert').html(`
+                //         <p class="landing-alert">${error.responseJSON.message}</p>
+                //     `);
+            })
+    }
 });
 
 //login existing user
-
 function logInExisting(ajaxAuthCall) {
     $('.js-login-form').submit(function (event) {
         event.preventDefault();
@@ -78,10 +74,11 @@ function logInExisting(ajaxAuthCall) {
         })
             .done(function (user) {
                 $('.input').val("");
-                console.log('token', user)
+                console.log('this is user for existing login', user)
+                console.log('this is user.userID : ', user.userID)
                 localStorage.setItem('token', user.authToken);
+                localStorage.setItem('userID', user.userID);
                 displayUpcomingEvents()
-                //localStorage.setItem('userID', user.data.userID);
                 //window.location.href = 'home.html'; //directs to home pg
             })
             .fail(function (error) {

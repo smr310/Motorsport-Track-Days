@@ -83,20 +83,20 @@ function routes (app) {
     //find the UpcomingEvent by id 
     //need this to execute on the register click
 
-    app.get('/upcomingEvents/:id', (req, res) => {
-        UpcomingEvent.findyById('5aea086e734d1d06be086b45').then(function (err, docs) {
-            if (!err) {
-                console.log("***", docs);
+    // app.get('/upcomingEvents/:id', (req, res) => {
+    //     UpcomingEvent.findyById('5aea086e734d1d06be086b45').then(function (err, docs) {
+    //         if (!err) {
+    //             console.log("***", docs);
 
-                // let myObj = {
-                //     events: docs
-                // }
-                // res.send(myObj)
-            } else { throw err; }
-        })
+    //             // let myObj = {
+    //             //     events: docs
+    //             // }
+    //             // res.send(myObj)
+    //         } else { throw err; }
+    //     })
 
 
-    })
+    // })
 
     
     app.post('/registeredEvents/:id', (req, res) => {
@@ -134,12 +134,6 @@ function routes (app) {
                needToRentSuit = true
             }
         });
-
-
-            
-
-
-
 
         RegisteredEvent.create({
             trackName: req.body.trackName,
