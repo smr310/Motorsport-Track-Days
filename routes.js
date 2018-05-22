@@ -1,5 +1,6 @@
 let UpcomingEvent = require('./upcomingModel').UpcomingEvent;
 let RegisteredEvent = require('./registeredModel').RegisteredEvent;
+let User = require('./users/models').User
 
 // let MOCK_UPCOMING_EVENTS = {
 //     "events": [
@@ -115,20 +116,39 @@ function routes (app) {
         });
 
         
-        RegisteredEvent.create({
-            trackName: req.body.trackName,
+        // RegisteredEvent.create({
+        //     trackName: req.body.trackName,
+        //     eventDate: req.body.eventDate,
+        //     needToRentBike: needToRentBike,
+        //     needToRentHelmet: needToRentHelmet,
+        //     needToRentSuit: needToRentSuit,
+        //     needToRentGloves: needToRentGloves,
+        //     needToRentBoots: needToRentBoots
+        //  }).then(function (doc) {
+
+        // console.log('this is doc from User.findByIdAndUpdate', doc);
+
+        // let myObj = {
+        //     events: doc
+        // }
+        // res.send(myObj)
+        // })
+
+        User.findByIdAndUpdate('5b0368b5a675ccf36f5e44fa', 
+        {registeredEvents:
+            [{trackName: req.body.trackName,
             eventDate: req.body.eventDate,
             needToRentBike: needToRentBike,
             needToRentHelmet: needToRentHelmet,
             needToRentSuit: needToRentSuit,
             needToRentGloves: needToRentGloves,
-            needToRentBoots: needToRentBoots
-        }).then(function(docs) {
+            needToRentBoots: needToRentBoots}]
+        }).then(function(doc) {
             
-                console.log(docs);
+                console.log('this is doc from User.findByIdAndUpdate', doc);
 
                 let myObj = {
-                    events: docs
+                    events: doc
                 }
                 res.send(myObj)
         })
