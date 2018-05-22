@@ -134,6 +134,10 @@ function routes (app) {
         // res.send(myObj)
         // })
 
+
+        //need to change hardcoded id to id variable 
+        //need to figure out how to get userid here 
+
         User.findByIdAndUpdate('5b0368b5a675ccf36f5e44fa', 
         {registeredEvents:
             [{trackName: req.body.trackName,
@@ -144,7 +148,8 @@ function routes (app) {
             needToRentGloves: needToRentGloves,
             needToRentBoots: needToRentBoots}]
         }).then(function(doc) {
-            
+
+
                 console.log('this is doc from User.findByIdAndUpdate', doc);
 
                 let myObj = {
