@@ -54,7 +54,7 @@ function routes (app) {
     app.get('/upcomingEvents', jwtAuth, (req, res) => {
         UpcomingEvent.find(function (err, docs) {
             if (!err) {
-                //console.log(docs);
+                console.log('this is docs from GET /upcomingEvents', docs);
 
                 let myObj = {
                     events: docs
@@ -69,7 +69,7 @@ function routes (app) {
     app.get('/registeredEvents', jwtAuth, (req, res) => {
         RegisteredEvent.find(function (err, docs) {
             if (!err) {
-                //console.log(docs);
+                console.log('this is docs from GET /registeredEvents', docs);
 
                 let myObj = {
                     events: docs
@@ -79,35 +79,14 @@ function routes (app) {
         });
     })
 
- 
-    //find the UpcomingEvent by id 
-    //need this to execute on the register click
-
-    // app.get('/upcomingEvents/:id', (req, res) => {
-    //     UpcomingEvent.findyById('5aea086e734d1d06be086b45').then(function (err, docs) {
-    //         if (!err) {
-    //             console.log("***", docs);
-
-    //             // let myObj = {
-    //             //     events: docs
-    //             // }
-    //             // res.send(myObj)
-    //         } else { throw err; }
-    //     })
-
-
-    // })
-
     
     app.post('/registeredEvents/:id', (req, res) => {
-        
         
         //store the necessary info into newly declared variables
         //declare/define all other variables 
         //RegisteredEvent.create() as is 
         
-        console.log(req.body)
-
+        console.log('this is req.body from POST /registeredEvents/:id', req.body)
         console.log('here is the track name: ', req.body.trackName)
 
 
