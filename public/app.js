@@ -87,13 +87,9 @@ function logInExisting(ajaxAuthCall) {
                         <p class="landing-alert">This username & password combination is not valid</p>
                     `);
             })
-       
-
     });
 }
 logInExisting();
-
-
 
 $('#signout').on('click', event => {
     event.preventDefault();
@@ -101,11 +97,8 @@ $('#signout').on('click', event => {
     window.location.href = 'index.html';
 });
 
-
-
 /////GET
 function displayUpcomingEvents() {
-
     $.ajax({
         type: "GET",
         url: "http://localhost:8080/upcomingEvents",
@@ -163,10 +156,9 @@ function getRegisteredEvents(callbackFn) {
             console.log(err)
         },
         beforeSend: function (xhr) {
-           
+        
         }
     });
-    
 }
 
 function updateDOM(data) {
@@ -202,7 +194,6 @@ function getPositionByElement (data, element) {
     return elementPos;
 }
 
-
 function deleteRegisteredEvent() {
     $('body').on('click', '.delete-button', function (event) {
         
@@ -233,36 +224,36 @@ function deleteRegisteredEvent() {
 
 function editRegisteredEvent() {
     $('body').on('click', '.edit-button', function (event) {
-
         //ask user for input
         $('.dashboard-div').html("");
-
         $('.dashboard-div').append(
             `
             <form id="update">
-                Will you be renting a motorcycle with us: <br>
-                <input type="radio" name="motorcycleRentalAnswer" value="Yes">Yes<br>
-                <input type="radio" name="motorcycleRentalAnswer" value="No">No, I will be riding my own motorcylce<br>
-                <br><br>
-                If you need to rent safety gear, please select all items you will need to rent: <br>
-                <div>
-                    <input type="checkbox" name="gearRental" value="Helmet">
-                    <label for="helmet">Helmet</label>
-                </div>
-                <div>
-                    <input type="checkbox" name="gearRental" value="Leather-Racing-Suit">
-                    <label for="Leather-Racing-Suit">Leather Racing Suit</label>
-                </div>
-                <div>
-                <input type="checkbox" name="gearRental" value="Gloves">
-                <label for="gloves">Gloves</label>
-                </div>
-                <div>
-                <input type="checkbox" name="gearRental" value="Boots">
-                <label for="Boots">Boots</label>
-                <div>
-                <input type="submit" value="Submit">
-                </div>
+                <fieldset>
+                    Will you be renting a motorcycle with us: <br>
+                    <input type="radio" name="motorcycleRentalAnswer" value="Yes">Yes<br>
+                    <input type="radio" name="motorcycleRentalAnswer" value="No">No, I will be riding my own motorcylce<br>
+                    <br><br>
+                    If you need to rent safety gear, please select all items you will need to rent: <br>
+                    <div>
+                        <input type="checkbox" name="gearRental" value="Helmet">
+                        <label for="helmet">Helmet</label>
+                    </div>
+                    <div>
+                        <input type="checkbox" name="gearRental" value="Leather-Racing-Suit">
+                        <label for="Leather-Racing-Suit">Leather Racing Suit</label>
+                    </div>
+                    <div>
+                    <input type="checkbox" name="gearRental" value="Gloves">
+                    <label for="gloves">Gloves</label>
+                    </div>
+                    <div>
+                    <input type="checkbox" name="gearRental" value="Boots">
+                    <label for="Boots">Boots</label>
+                    <div>
+                    <input type="submit" value="Submit">
+                    </div>
+                </fieldset>
             </form>
             `
         );
@@ -297,65 +288,58 @@ function editRegisteredEvent() {
                 contentType: "application/json",
                 headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` },
                 success: function (data) {
-                    getRegisteredEvents(updateDOM)
-                    console.log("this is ajax success function line one");
-                    console.log(data)
-                    //above code does not do anything?
-
+                    getRegisteredEvents(updateDOM);
                 },
                 error: function (err) {
                     console.log(err)
                 },
                 beforeSend: function (xhr) {
-
                 }
             });
         });
     })
 }
 
-
-
 //////POST 
-
 function registerButtonClickHandler() {
     $('body').on('click', '.register-button', function (event) {
 
         //clearn & update DOM to ask for user input 
         $('.dashboard-div').html("");
-
         $('.dashboard-div').append(
             `
             <form id="registration">
-                First name:<br>
-                <input type="text" name="firstName" value="">
-                <br><br>
-                Last name:<br>
-                <input type="text" name="lastName" value="">
-                <br><br>
-                Will you be renting a motorcycle with us: <br>
-                <input type="radio" name="motorcycleRentalAnswer" value="Yes">Yes<br>
-                <input type="radio" name="motorcycleRentalAnswer" value="No">No, I will be riding my own motorcylce<br>
-                <br><br>
-                If you need to rent safety gear, please select all items you will need to rent: <br>
-                <div>
-                    <input type="checkbox" name="gearRental" value="Helmet">
-                    <label for="helmet">Helmet</label>
-                </div>
-                <div>
-                    <input type="checkbox" name="gearRental" value="Leather-Racing-Suit">
-                    <label for="Leather-Racing-Suit">Leather Racing Suit</label>
-                </div>
-                <div>
-                <input type="checkbox" name="gearRental" value="Gloves">
-                <label for="gloves">Gloves</label>
-                </div>
-                <div>
-                <input type="checkbox" name="gearRental" value="Boots">
-                <label for="Boots">Boots</label>
-                <div>
-                <input type="submit" value="Submit">
-                </div>
+                <fieldset>
+                    First name:<br>
+                    <input type="text" name="firstName" value="">
+                    <br><br>
+                    Last name:<br>
+                    <input type="text" name="lastName" value="">
+                    <br><br>
+                    Will you be renting a motorcycle with us: <br>
+                    <input type="radio" name="motorcycleRentalAnswer" value="Yes">Yes<br>
+                    <input type="radio" name="motorcycleRentalAnswer" value="No">No, I will be riding my own motorcylce<br>
+                    <br><br>
+                    If you need to rent safety gear, please select all items you will need to rent: <br>
+                    <div>
+                        <input type="checkbox" name="gearRental" value="Helmet">
+                        <label for="helmet">Helmet</label>
+                    </div>
+                    <div>
+                        <input type="checkbox" name="gearRental" value="Leather-Racing-Suit">
+                        <label for="Leather-Racing-Suit">Leather Racing Suit</label>
+                    </div>
+                    <div>
+                    <input type="checkbox" name="gearRental" value="Gloves">
+                    <label for="gloves">Gloves</label>
+                    </div>
+                    <div>
+                    <input type="checkbox" name="gearRental" value="Boots">
+                    <label for="Boots">Boots</label>
+                    <div>
+                    <input type="submit" value="Submit">
+                    </div>
+                </fieldset>
             </form>
             `
         );
@@ -366,7 +350,6 @@ function registerButtonClickHandler() {
         let eventDate = $($(this).parent().find('p')[2]).html();
         let eventDateString = eventDate.split("eventDate: ")[1];
         
-       
         $("#registration").submit(function (event) {
             event.preventDefault();
 
@@ -410,17 +393,11 @@ function registerButtonClickHandler() {
     })
 }
 
-
-
-
 function homePageButtonClickHandler() {
     $('body').on('click', '#homepage-button', function (event) {
         displayUpcomingEvents()
     });
 }
-
-
-
 
 //on page load do this
 $(function () {
@@ -429,6 +406,5 @@ $(function () {
     getAndDisplayRegisteredEvents();
     deleteRegisteredEvent();
     editRegisteredEvent();
-
 })
 
