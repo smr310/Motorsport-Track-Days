@@ -1,4 +1,9 @@
+
 'use strict';
+
+require('dotenv').config();
+
+const { TEST_DATABASE_URL } = require('../config');
 
 const chai = require('chai');
 const chaiHttp = require('chai-http');
@@ -18,7 +23,7 @@ describe('API resource', function () {
     // `seedBlogPostData` and `tearDownDb` each return a promise,
     // so we return the value returned by these function calls.
     before(function () {
-        return runServer();
+        return runServer(TEST_DATABASE_URL);
     });
 
     beforeEach(function () {

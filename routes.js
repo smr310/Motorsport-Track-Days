@@ -2,51 +2,6 @@ let UpcomingEvent = require('./upcomingModel').UpcomingEvent;
 let RegisteredEvent = require('./registeredModel').RegisteredEvent;
 let User = require('./users/models').User
 
-// let MOCK_UPCOMING_EVENTS = {
-//     "events": [
-//         {
-//             "id": "aaaaaa",
-//             "trackName": "New Hampshire Motor Speedway",
-//             "eventDate": "June 1, 2018"
-//         },
-//         {
-//             "id": "bbbbbb",
-//             "trackName": "Palmer Motorsports Park",
-//             "eventDate": "August 5, 2018"
-//         },
-//         {
-//             "id": "cccccc",
-//             "trackName": "Thompson Speedway Motorsports Park",
-//             "eventDate": "September 10, 2018"
-//         }
-//     ]
-// }
-
-// let MOCK_REGISTERED_EVENTS = {
-//     "events": [
-//         {
-//             "id": "111111",
-//             "trackName": "New Hampshire Motor Speedway",
-//             "eventDate": "June 1, 2018",
-//             "needToRentBike": true,
-//             "needToRentHelmet": false,
-//             "needToRentSuit": false,
-//             "needToRentGloves": false,
-//             "needToRentBoots": false
-//         },
-//         {
-//             "id": "222222",
-//             "trackName": "Palmer Motorsports Park",
-//             "eventDate": "August 5, 2018",
-//             "needToRentBike": false,
-//             "needToRentHelmet": false,
-//             "needToRentSuit": false,
-//             "needToRentGloves": false,
-//             "needToRentBoots": false
-//         }
-//     ]
-// }
-
 const passport = require('passport');
 const jwtAuth = passport.authenticate('jwt', { session: false });
 

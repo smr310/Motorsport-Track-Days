@@ -23,7 +23,6 @@ mongoose.Promise = global.Promise;
 const { PORT, DATABASE_URL } = require('./config');
 
 
-
 app.use(express.static('public'));
 app.use(bodyParser.json());
 
@@ -71,6 +70,7 @@ new routes(app)
 let server;
 
 function runServer(databaseUrl, port = PORT) {
+    console.log('this is first dbURL', databaseUrl)
     return new Promise((resolve, reject) => {
         console.log('this is the db URL: ', databaseUrl);
         mongoose.connect(databaseUrl, err => {
@@ -104,6 +104,6 @@ function closeServer() {
     });
 }
 
-if (require.main === module) { runServer(DATABASE_URL).catch(err => console.error(err)); }
+if (require.main === module) { console.log('this is second dbURL', DATABASE_URL); runServer(DATABASE_URL).catch(err => console.error(err)); }
 
 module.exports = { runServer, app, closeServer };
