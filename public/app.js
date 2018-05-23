@@ -213,6 +213,7 @@ function deleteRegisteredEvent() {
             url: "http://localhost:8080/registeredEvents" + id,
             data: {},
             dataType: 'json',
+            headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` },
             success: function (data) {
                 //updateDOM(data);
                 getRegisteredEvents(updateDOM)
@@ -294,6 +295,7 @@ function editRegisteredEvent() {
                 data: JSON.stringify(values),
                 //dataType: 'json',
                 contentType: "application/json",
+                headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` },
                 success: function (data) {
                     getRegisteredEvents(updateDOM)
                     console.log("this is ajax success function line one");

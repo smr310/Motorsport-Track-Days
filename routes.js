@@ -50,130 +50,44 @@ let User = require('./users/models').User
 const passport = require('passport');
 const jwtAuth = passport.authenticate('jwt', { session: false });
 
-function routes (app) {
+function routes(app) {
 
     app.get('/upcomingEvents', jwtAuth, (req, res) => {
         UpcomingEvent.find(function (err, docs) {
             if (!err) {
                 console.log('this is docs from GET /upcomingEvents', docs);
-
                 let myObj = {
                     events: docs
                 }
                 res.send(myObj)
             } else { throw err; }
         });
-        
-        
     })
 
     app.get('/registeredEvents', jwtAuth, (req, res) => {
-        User.findById('5b04b15c2cc67708d235a3a3')
+        User.findById(req.user.id)
             .populate('registeredEvents').
             exec(function (err, docs) {
                 if (!err) {
                     console.log('this is docs from GET /registeredEvents', docs);
-
                     let myObj = {
                         events: docs.registeredEvents
                     }
                     res.send(myObj)
                 } else { throw err; }
             });
-
-
-
-        // RegisteredEvent.find(function (err, docs) {
-        //     if (!err) {
-        //         console.log('this is docs from GET /registeredEvents', docs);
-
-        //         let myObj = {
-        //             events: docs
-        //         }
-        //         res.send(myObj)
-        //     } else { throw err; }
-        // });
     })
 
-    
+
     app.post('/registeredEvents/:id', jwtAuth, (req, res) => {
-        
+
         //store the necessary info into newly declared variables
         //declare/define all other variables 
         //RegisteredEvent.create() as is 
-        
+
         console.log('this is req.body from POST /registeredEvents/:id', req.body)
         console.log('here is the track name: ', req.body.trackName)
 
-
-        let needToRentBike = false;
-        let needToRentHelmet = false;
-        let needToRentBoots = false;
-        let needToRentGloves = false;
-        let needToRentSuit = false;
-
-        if (req.body.motorcycleRentalAnswer === 'Yes') {
-            needToRentBike = true;
-        } else {
-            needToRentBike = false;
-        }
-
-        req.body.gearRental.forEach((item) => {
-            if (item === 'Helmet') {
-                needToRentHelmet = true
-            } else if (item === 'Boots') {
-                needToRentBoots = true
-            } else if (item === 'Gloves') {
-                needToRentGloves = true
-            } else if (item === 'Leather-Racing-Suit') {
-               needToRentSuit = true
-            }
-        });
-
-
-        //need to change hardcoded id to id variable 
-        //need to figure out how to get userid here 
-
-        //below line will not work because server does not have access to localStorage
-        //let id = localStorage.ID;
-        console.log('this is passports req.user', req.user);
-        console.log('this is req.param.id', req.params.id);
-
-        User.findByIdAndUpdate(req.user.id, 
-            //{ $push: { registeredEvents: req.params.id } 
-         { $push: {
-             registeredEvents: [{
-                 trackName: req.body.trackName,
-                 eventDate: req.body.eventDate,
-                 needToRentBike: needToRentBike,
-                 needToRentHelmet: needToRentHelmet,
-                 needToRentSuit: needToRentSuit,
-                 needToRentGloves: needToRentGloves,
-                 needToRentBoots: needToRentBoots
-             }]
-            
-         }   
-        // {registeredEvents:
-            // [{trackName: req.body.trackName,
-            // eventDate: req.body.eventDate,
-            // needToRentBike: needToRentBike,
-            // needToRentHelmet: needToRentHelmet,
-            // needToRentSuit: needToRentSuit,
-            // needToRentGloves: needToRentGloves,
-            // needToRentBoots: needToRentBoots}]
-        }).then(function(doc) {
-                console.log('this is doc from User.findByIdAndUpdate', doc);
-                let myObj = {
-                    events: doc
-                }
-                res.send(myObj)
-        })
-    })
-
-
-    app.put('/registeredEvents:id', (req, res) => {
-
-        let id = req.params.id
 
         let needToRentBike = false;
         let needToRentHelmet = false;
@@ -199,53 +113,105 @@ function routes (app) {
             }
         });
 
-        RegisteredEvent.findByIdAndUpdate(id, {
-            needToRentBike: needToRentBike,
-            needToRentHelmet: needToRentHelmet,
-            needToRentBoots: needToRentBoots,
-            needToRentGloves: needToRentGloves,
-            needToRentSuit: needToRentSuit
-        }).then(function(doc) {
-            
+        console.log('this is passports req.user', req.user);
+        console.log('this is req.param.id', req.params.id);
+
+        User.findById(req.user.id).then(function (user) {
+            const foundEvent = user.registeredEvents.find((event) => {
+                //line below defines _eventDate in string format without surrounding quotes to be compared to req.body.eventDate
+                const _eventDate = JSON.stringify(event.eventDate).replace(/['"]+/g, '')
+                return event.trackName === req.body.trackName && _eventDate === req.body.eventDate
+            })
+            console.log("this is found event: ", foundEvent)
+
+            if (foundEvent) {
+                console.log('notify the client that they are already registered for this event')
+            } else {
+                User.findByIdAndUpdate(req.user.id,
+                    {
+                        $push: {
+                            registeredEvents: [{
+                                trackName: req.body.trackName,
+                                eventDate: req.body.eventDate,
+                                needToRentBike: needToRentBike,
+                                needToRentHelmet: needToRentHelmet,
+                                needToRentSuit: needToRentSuit,
+                                needToRentGloves: needToRentGloves,
+                                needToRentBoots: needToRentBoots
+                            }]
+                        }
+                    }).then(function (doc) {
+                        console.log('this is doc from User.findByIdAndUpdate', doc);
+                        let myObj = {
+                            events: doc
+                        }
+                        res.send(myObj)
+                    })
+            }
+        })
+    })
+
+
+    app.put('/registeredEvents:id', jwtAuth, (req, res) => {
+
+        let id = req.params.id
+        console.log('this is the id of the event to change', id)
+
+        let needToRentBike = false;
+        let needToRentHelmet = false;
+        let needToRentBoots = false;
+        let needToRentGloves = false;
+        let needToRentSuit = false;
+
+        if (req.body.motorcycleRentalAnswer === 'Yes') {
+            needToRentBike = true;
+        } else {
+            needToRentBike = false;
+        }
+
+        req.body.gearRental.forEach((item) => {
+            if (item === 'Helmet') {
+                needToRentHelmet = true
+            } else if (item === 'Boots') {
+                needToRentBoots = true
+            } else if (item === 'Gloves') {
+                needToRentGloves = true
+            } else if (item === 'Leather-Racing-Suit') {
+                needToRentSuit = true
+            }
         });
 
+
+        User.update({ "_id": req.user.id, "registeredEvents._id": id },
+            {
+                $set:
+                    {
+                        "registeredEvents.$.needToRentBike": needToRentBike,
+                        "registeredEvents.$.needToRentHelmet": needToRentHelmet,
+                        "registeredEvents.$.needToRentBoots": needToRentBoots,
+                        "registeredEvents.$.needToRentGloves": needToRentGloves,
+                        "registeredEvents.$.needToRentSuit": needToRentSuit,
+
+                    }
+            }).then(function (doc) { });
         res.end();
     })
 
 
-    app.delete('/registeredEvents:id', (req, res) => {
+    app.delete('/registeredEvents:id', jwtAuth, (req, res) => {
         let id = req.params.id;
         console.log('this is the id', id)
-        
-        RegisteredEvent.findByIdAndRemove(id)
-            .then(function(doc, docs) {
-                doc.remove
-                
-                let myObj = {
-                    events: docs
-                }
-                res.send(myObj)
-            });
 
-
-
-        //below worked
-        //RegisteredEvent.findOne({ trackName: 'New Hampshire Motor Speedway'}).then(doc => doc.remove())
-
-
-
-        // let found = false;
-
-        // MOCK_REGISTERED_EVENTS.events.forEach(function (event, index) {
-        //     if (!found && event.id === id) {
-        //         MOCK_REGISTERED_EVENTS.events.splice(index, 1);
-        //     }
-        // })
-
-        // res.send(MOCK_REGISTERED_EVENTS);
+        User.findOne({ "_id": req.user.id }, function (err, result) {
+            console.log('this is result', result)
+            result.registeredEvents.id(id).remove();
+            result.save();
+            let myObj = {
+                events: result.registeredEvents
+            }
+            res.send(myObj)
+        });
     })
-
-
 }
 
 
