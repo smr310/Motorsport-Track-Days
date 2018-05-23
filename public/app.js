@@ -392,18 +392,16 @@ function registerButtonClickHandler() {
                 data: JSON.stringify(values),
                 //dataType: 'json',
                 contentType: "application/json",
+                headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` },
                 success: function (data) {
                     getRegisteredEvents(updateDOM)
                     console.log("this is ajax success function line one");
-                    //console.log(data)
-                    //above code does not do anything?
-
+                    console.log('this is data from AJAX POST request', data)
                 },
                 error: function (err) {
                     console.log(err)
                 },
                 beforeSend: function (xhr) {
-
                 }
             });
         });

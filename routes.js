@@ -68,20 +68,35 @@ function routes (app) {
     })
 
     app.get('/registeredEvents', jwtAuth, (req, res) => {
-        RegisteredEvent.find(function (err, docs) {
-            if (!err) {
-                console.log('this is docs from GET /registeredEvents', docs);
+        User.findById('5b04b15c2cc67708d235a3a3')
+            .populate('registeredEvents').
+            exec(function (err, docs) {
+                if (!err) {
+                    console.log('this is docs from GET /registeredEvents', docs);
 
-                let myObj = {
-                    events: docs
-                }
-                res.send(myObj)
-            } else { throw err; }
-        });
+                    let myObj = {
+                        events: docs.registeredEvents
+                    }
+                    res.send(myObj)
+                } else { throw err; }
+            });
+
+
+
+        // RegisteredEvent.find(function (err, docs) {
+        //     if (!err) {
+        //         console.log('this is docs from GET /registeredEvents', docs);
+
+        //         let myObj = {
+        //             events: docs
+        //         }
+        //         res.send(myObj)
+        //     } else { throw err; }
+        // });
     })
 
     
-    app.post('/registeredEvents/:id', (req, res) => {
+    app.post('/registeredEvents/:id', jwtAuth, (req, res) => {
         
         //store the necessary info into newly declared variables
         //declare/define all other variables 
@@ -115,43 +130,39 @@ function routes (app) {
             }
         });
 
-        
-        // RegisteredEvent.create({
-        //     trackName: req.body.trackName,
-        //     eventDate: req.body.eventDate,
-        //     needToRentBike: needToRentBike,
-        //     needToRentHelmet: needToRentHelmet,
-        //     needToRentSuit: needToRentSuit,
-        //     needToRentGloves: needToRentGloves,
-        //     needToRentBoots: needToRentBoots
-        //  }).then(function (doc) {
-
-        // console.log('this is doc from User.findByIdAndUpdate', doc);
-
-        // let myObj = {
-        //     events: doc
-        // }
-        // res.send(myObj)
-        // })
-
 
         //need to change hardcoded id to id variable 
         //need to figure out how to get userid here 
 
-        User.findByIdAndUpdate('5b0368b5a675ccf36f5e44fa', 
-        {registeredEvents:
-            [{trackName: req.body.trackName,
-            eventDate: req.body.eventDate,
-            needToRentBike: needToRentBike,
-            needToRentHelmet: needToRentHelmet,
-            needToRentSuit: needToRentSuit,
-            needToRentGloves: needToRentGloves,
-            needToRentBoots: needToRentBoots}]
+        //below line will not work because server does not have access to localStorage
+        //let id = localStorage.ID;
+        console.log('this is passports req.user', req.user);
+        console.log('this is req.param.id', req.params.id);
+
+        User.findByIdAndUpdate(req.user.id, 
+            //{ $push: { registeredEvents: req.params.id } 
+         { $push: {
+             registeredEvents: [{
+                 trackName: req.body.trackName,
+                 eventDate: req.body.eventDate,
+                 needToRentBike: needToRentBike,
+                 needToRentHelmet: needToRentHelmet,
+                 needToRentSuit: needToRentSuit,
+                 needToRentGloves: needToRentGloves,
+                 needToRentBoots: needToRentBoots
+             }]
+            
+         }   
+        // {registeredEvents:
+            // [{trackName: req.body.trackName,
+            // eventDate: req.body.eventDate,
+            // needToRentBike: needToRentBike,
+            // needToRentHelmet: needToRentHelmet,
+            // needToRentSuit: needToRentSuit,
+            // needToRentGloves: needToRentGloves,
+            // needToRentBoots: needToRentBoots}]
         }).then(function(doc) {
-
-
                 console.log('this is doc from User.findByIdAndUpdate', doc);
-
                 let myObj = {
                     events: doc
                 }

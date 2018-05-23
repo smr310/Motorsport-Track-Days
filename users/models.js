@@ -17,13 +17,8 @@ const UserSchema = mongoose.Schema({
     firstName: { type: String, default: '' },
     lastName: { type: String, default: '' },
     registeredEvents: [{
-        trackName: { type: String, required: true },
-        eventDate: { type: Date, required: true },
-        needToRentBike: { type: Boolean, required: true },
-        needToRentHelmet: { type: Boolean, required: true },
-        needToRentSuit: { type: Boolean, required: true },
-        needToRentGloves: { type: Boolean, required: true },
-        needToRentBoots: { type: Boolean, required: true }
+        //type: mongoose.Schema.ObjectId, ref: 'UpcomingEvent'
+        
     }]
 });
 
@@ -31,7 +26,8 @@ UserSchema.methods.serialize = function () {
     return {
         username: this.username || '',
         firstName: this.firstName || '',
-        lastName: this.lastName || ''
+        lastName: this.lastName || '',
+        id: this._id || ''
     };
 };
 
