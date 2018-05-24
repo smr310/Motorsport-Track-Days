@@ -3,18 +3,46 @@
 
 require('dotenv').config();
 
-const { TEST_DATABASE_URL } = require('../config');
-
 const chai = require('chai');
 const chaiHttp = require('chai-http');
+const faker = require('faker');
+const mongoose = require('mongoose');
 
-// this makes the expect syntax available throughout
-// this module
 const expect = chai.expect;
+
+const { UpcomingEvent } = require('../upcomingModel');
+const { app, runServer, closeServer } = require('../server');
+const { TEST_DATABASE_URL } = require('../config');
 
 chai.use(chaiHttp);
 
-const { app, runServer, closeServer } = require('../server');
+function seedUpcomingEventData() {
+    console.log('seeding UpcomingEventData')
+
+    const seedData = [];
+
+    for (let i = 1; i <= 10; i++) {
+        seedData.push(generateUpcomingEventData());
+    }
+    // this will return a promise
+    return UpcomingEvent.insertMany(seedData);
+}
+
+function generateUpcomingEventData() {
+    return {
+        trackName: faker.address.city() + ' Race Track',
+        eventDate: faker.date.future()
+
+    }
+}
+
+
+function tearDownDb() {
+    console.log('Deleting database');
+    return mongoose.connection.dropDatabase();
+}
+
+
 
 describe('API resource', function () {
 
@@ -27,11 +55,11 @@ describe('API resource', function () {
     });
 
     beforeEach(function () {
-        //return seedBlogPostData();
+        return seedUpcomingEventData();
     });
 
     afterEach(function () {
-        //return tearDownDb();
+        return tearDownDb();
     });
 
     after(function () {
@@ -41,8 +69,7 @@ describe('API resource', function () {
     // note the use of nested `describe` blocks.
     // this allows us to make clearer, more discrete tests that focus
     // on proving something small
-    describe('GET endpoints', function () {
-
+    describe('GET  / endpoint', function () {
         it('should return index html', function () {
             let res;
             return chai.request(app)
@@ -51,12 +78,49 @@ describe('API resource', function () {
                     res = _res
                     expect(res).to.have.status(200);
                     expect(res).to.be.html;
-
                 })
         });
-    
     })
 
+    describe('GET  /upcomingEvents endpoint', function () {
+        it('should return all upcoming events', function () {
+         
+            return chai.request(app)
+               
+        });
+    })
+
+    describe('GET  /registeredEvents endpoint', function () {
+        it('should return all registered events', function () {
+
+            return chai.request(app)
+
+        });
+    })
+
+    describe('POST  /registeredEvents/:id', function () {
+        it('should add a new registered event', function () {
+
+            return chai.request(app)
+
+        });
+    })
+
+    describe('PUT  /registeredEvents:id', function () {
+        it('should update the fields you send over', function () {
+
+            return chai.request(app)
+
+        });
+    })
+
+    describe('DELETE  /registeredEvents:id endpoint', function () {
+        it('should delete a registered event by id', function () {
+
+            return chai.request(app)
+
+        });
+    })
 
 });
 
