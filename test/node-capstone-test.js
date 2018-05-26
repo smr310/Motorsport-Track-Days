@@ -13,59 +13,64 @@ const expect = chai.expect;
 const { UpcomingEvent } = require('../upcomingModel');
 const { app, runServer, closeServer } = require('../server');
 const { TEST_DATABASE_URL } = require('../config');
+const { User } = require('../users/models');
 
 chai.use(chaiHttp);
 
 let token;
 //will eventually need to NOT hardcode the token value
-token = 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7InVzZXJuYW1lIjoic21yMzEwODgiLCJmaXJzdE5hbWUiOiJzdGV2ZSIsImxhc3ROYW1lIjoicm9tbSIsImlkIjoiNWIwNWVhNmY3MmI3NTkzNTJmZTNhZDU1In0sImlhdCI6MTUyNzExNDM2OCwiZXhwIjoxNTI3NzE5MTY4LCJzdWIiOiJzbXIzMTA4OCJ9.-Eph16lmxDYwPtm0IJ77QtHoo-bC5Y8hCfRCSMg7Bl8';
+//let token2 = 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7InVzZXJuYW1lIjoic21yMzEwODgiLCJmaXJzdE5hbWUiOiJzdGV2ZSIsImxhc3ROYW1lIjoicm9tbSIsImlkIjoiNWIwNWVhNmY3MmI3NTkzNTJmZTNhZDU1In0sImlhdCI6MTUyNzExNDM2OCwiZXhwIjoxNTI3NzE5MTY4LCJzdWIiOiJzbXIzMTA4OCJ9.-Eph16lmxDYwPtm0IJ77QtHoo-bC5Y8hCfRCSMg7Bl8';
+
+function createUser() {
+    console.log("Creating user.");
+    let testUser = {
+        firstName: "steve",
+        lastName: "tester",
+        username: "testuser",
+        password: "testpassword"
+    }
+    return new Promise((resolve, reject) => {
+        chai.request(app)
+            .post('/api/users')
+            .send(testUser)
+            .then((res) => {
+                console.log('Registered user.');
+                loginUser().then(() => {
+                    resolve()
+                });
+            })
+            .catch((error) => {
+                console.log(error)
+                reject(error)
+            });
+    });
+}
 
 
-// function createUser() {
-//     console.log("Creating user.");
-//     let testUser = {
-//         name: "tester",
-//         username: "testing",
-//         password: "testpassword"
-//     }
-//     return new Promise((resolve, reject) => {
-//         chai.request(app)
-//             .post('api/users')
-//             .send(testUser)
-//             .then((res) => {
-//                 console.log('Registered user.');
-//                 loginUser().then(() => {
-//                     resolve()
-//                 });
-//             })
-//             .catch((error) => {
-//                 console.log(error)
-//                 reject(error) //
-//             });
-//     });
-// }
-
-// function loginUser() {
-//     console.log('logging in user')
-//     let loginUser = {
-//         username: "testing",
-//         password: "thisis10letterslong"
-//     }
-//     return new Promise((resolve, reject) => {
-//         chai.request(app)
-//             .post('/user/login')
-//             .send(loginUser)
-//             .then((res) => {
-//                 token = res.body.data.token;
-//                 userId = res.body.data.userID;
-//                 resolve();
-//             })
-//             .catch((error) => {
-//                 console.log(error)
-//                 reject(error)
-//             });
-//     });
-// }
+function loginUser(pw) {
+    console.log('logging in user')
+    let loginUser = {
+        username: "testuser",
+        password: "testpassword"
+    }
+    return new Promise((resolve, reject) => {
+        chai.request(app)
+            .post('/api/auth/login')
+            .send(loginUser)
+            .then((res) => {
+                console.log('this is res.body', res.body);
+                token = res.body.authToken;
+                console.log('this is the token: ', token);
+                console.log('this it token2: ', token2)
+                //userId = res.body.data.userID;
+                resolve();
+            })
+            .catch((error) => {
+                console.log('this is the !! error', error)
+                reject(error)
+            });
+    });
+}
 
 
 
@@ -105,7 +110,11 @@ describe('API resource', function () {
     // `seedBlogPostData` and `tearDownDb` each return a promise,
     // so we return the value returned by these function calls.
     before(function () {
-        return runServer(TEST_DATABASE_URL);
+        return runServer(TEST_DATABASE_URL)
+            .then(function () {
+                console.log("Server is running");
+                return createUser();
+            })
     });
 
     beforeEach(function () {
@@ -129,7 +138,7 @@ describe('API resource', function () {
             return chai.request(app)
                 .get('/')
                 .then(function (_res) {
-                   //console.log('this is _res', _res)
+                    //console.log('this is _res', _res)
                     res = _res
                     expect(res).to.have.status(200);
                     expect(res).to.be.html;
@@ -139,14 +148,12 @@ describe('API resource', function () {
 
     describe('GET  /upcomingEvents endpoint', function () {
         it('should return all upcoming events', function () {
-    //gets hold of valid token 
-    //pass along parameter of token in //header 
-    //
             return chai.request(app)
                 .get('/upcomingEvents')
-                .set('Authorization', token)
+                .set('Authorization', "Bearer " + token)
                 .then(function (res) {
-                    console.log('this is res.body', res.body)
+                    //console.log('this is res.body for GET /upcomingEvents', res.body);
+                    expect(res).to.have.status(200);
                 })
         });
     })

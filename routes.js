@@ -11,7 +11,7 @@ function routes(app) {
         console.log('HITTING THE ENDPOINT');
         UpcomingEvent.find(function (err, docs) {
             if (!err) {
-                console.log('this is docs from GET /upcomingEvents', docs);
+                //console.log('this is docs from GET /upcomingEvents', docs);
                 let myObj = {
                     events: docs
                 }
@@ -25,7 +25,7 @@ function routes(app) {
             .populate('registeredEvents').
             exec(function (err, docs) {
                 if (!err) {
-                    console.log('this is docs from GET /registeredEvents', docs);
+                    //console.log('this is docs from GET /registeredEvents', docs);
                     let myObj = {
                         events: docs.registeredEvents
                     }

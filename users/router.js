@@ -10,7 +10,7 @@ const jsonParser = bodyParser.json({ extended: true });
 
 // POST REQUEST to register a new user
 router.post('/', jsonParser, (req, res) => {
-    console.log('This is req.body from the register AJAX call', req.body);
+    console.log('This is req.body for /api/users', req.body);
     const requiredFields = ['username', 'password'];
     const missingField = requiredFields.find(field => !(field in req.body));
 
