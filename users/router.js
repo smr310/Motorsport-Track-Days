@@ -123,9 +123,11 @@ router.post('/', jsonParser, (req, res) => {
             });
         })
         .then(user => {
+            console.log('user created', user)
             return res.status(201).json(user.serialize());
         })
         .catch(err => {
+            console.log('this is error', err)
             // Forward validation errors on to the client, otherwise give a 500
             // error because something unexpected has happened
             if (err.reason === 'ValidationError') {

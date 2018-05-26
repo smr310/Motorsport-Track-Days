@@ -8,6 +8,7 @@ const jwtAuth = passport.authenticate('jwt', { session: false });
 function routes(app) {
 
     app.get('/upcomingEvents', jwtAuth, (req, res) => {
+        console.log('HITTING THE ENDPOINT');
         UpcomingEvent.find(function (err, docs) {
             if (!err) {
                 console.log('this is docs from GET /upcomingEvents', docs);
