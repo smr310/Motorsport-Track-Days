@@ -37,13 +37,8 @@ function routes(app) {
 
     app.post('/registeredEvents/:id', jwtAuth, (req, res) => {
 
-        //store the necessary info into newly declared variables
-        //declare/define all other variables 
-        //RegisteredEvent.create() as is 
-
         console.log('this is req.body from POST /registeredEvents/:id', req.body)
         console.log('here is the track name: ', req.body.trackName)
-
 
         let needToRentBike = false;
         let needToRentHelmet = false;

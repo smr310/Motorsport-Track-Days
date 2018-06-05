@@ -131,9 +131,6 @@ function displayUpcomingEvents() {
     });
 }
 
-
-
-
 function getAndDisplayRegisteredEvents() {
     $('#dashboard-button').on('click', function (event) {
         $('.dashboard-div').html("");
@@ -194,111 +191,13 @@ function getPositionByElement (data, element) {
     return elementPos;
 }
 
-function deleteRegisteredEvent() {
-    $('body').on('click', '.delete-button', function (event) {
-        
-        let id = $(this).parent().attr('id');
-
-        $.ajax({
-            type: "DELETE",
-            url: "http://localhost:8080/registeredEvents" + id,
-            data: {},
-            dataType: 'json',
-            headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` },
-            success: function (data) {
-                //updateDOM(data);
-                getRegisteredEvents(updateDOM)
-            },
-            error: function (err) {
-                console.log(err)
-            },
-            beforeSend: function (xhr) {
-
-            }
-        });
-    })
+function homePageButtonClickHandler() {
+    $('body').on('click', '#homepage-button', function (event) {
+        displayUpcomingEvents()
+    });
 }
 
 
-//////PUT
-
-function editRegisteredEvent() {
-    $('body').on('click', '.edit-button', function (event) {
-        //ask user for input
-        $('.dashboard-div').html("");
-        $('.dashboard-div').append(
-            `
-            <form id="update">
-                <fieldset>
-                    Will you be renting a motorcycle with us: <br>
-                    <input type="radio" name="motorcycleRentalAnswer" value="Yes">Yes<br>
-                    <input type="radio" name="motorcycleRentalAnswer" value="No">No, I will be riding my own motorcylce<br>
-                    <br><br>
-                    If you need to rent safety gear, please select all items you will need to rent: <br>
-                    <div>
-                        <input type="checkbox" name="gearRental" value="Helmet">
-                        <label for="helmet">Helmet</label>
-                    </div>
-                    <div>
-                        <input type="checkbox" name="gearRental" value="Leather-Racing-Suit">
-                        <label for="Leather-Racing-Suit">Leather Racing Suit</label>
-                    </div>
-                    <div>
-                    <input type="checkbox" name="gearRental" value="Gloves">
-                    <label for="gloves">Gloves</label>
-                    </div>
-                    <div>
-                    <input type="checkbox" name="gearRental" value="Boots">
-                    <label for="Boots">Boots</label>
-                    <div>
-                    <input type="submit" value="Submit">
-                    </div>
-                </fieldset>
-            </form>
-            `
-        );
-
-        let id = $(this).parent().attr('id');
-        console.log('this is the id:', id);
-
-        $("#update").submit(function (event) {
-            event.preventDefault();
-
-            let values = {
-                motorcycleRentalAnswer: "",
-                gearRental: ""
-            };
-
-            let $inputs = $('#update :input');
-
-            values.motorcycleRentalAnswer = $('input[name=motorcycleRentalAnswer]:checked').val();
-            values.gearRental = []
-
-            let gearRentalDOMArray = $('input[name=gearRental]:checked');
-
-            for (let i = 0; i < gearRentalDOMArray.length; i++) {
-                values.gearRental.push(gearRentalDOMArray[i].value);
-            }
-
-            $.ajax({
-                type: "PUT",
-                url: "http://localhost:8080/registeredEvents" + id,
-                data: JSON.stringify(values),
-                //dataType: 'json',
-                contentType: "application/json",
-                headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` },
-                success: function (data) {
-                    getRegisteredEvents(updateDOM);
-                },
-                error: function (err) {
-                    console.log(err)
-                },
-                beforeSend: function (xhr) {
-                }
-            });
-        });
-    })
-}
 
 //////POST 
 function registerButtonClickHandler() {
@@ -393,10 +292,113 @@ function registerButtonClickHandler() {
     })
 }
 
-function homePageButtonClickHandler() {
-    $('body').on('click', '#homepage-button', function (event) {
-        displayUpcomingEvents()
-    });
+
+
+//////PUT
+function editRegisteredEvent() {
+    $('body').on('click', '.edit-button', function (event) {
+        //ask user for input
+        $('.dashboard-div').html("");
+        $('.dashboard-div').append(
+            `
+            <form id="update">
+                <fieldset>
+                    Will you be renting a motorcycle with us: <br>
+                    <input type="radio" name="motorcycleRentalAnswer" value="Yes">Yes<br>
+                    <input type="radio" name="motorcycleRentalAnswer" value="No">No, I will be riding my own motorcylce<br>
+                    <br><br>
+                    If you need to rent safety gear, please select all items you will need to rent: <br>
+                    <div>
+                        <input type="checkbox" name="gearRental" value="Helmet">
+                        <label for="helmet">Helmet</label>
+                    </div>
+                    <div>
+                        <input type="checkbox" name="gearRental" value="Leather-Racing-Suit">
+                        <label for="Leather-Racing-Suit">Leather Racing Suit</label>
+                    </div>
+                    <div>
+                    <input type="checkbox" name="gearRental" value="Gloves">
+                    <label for="gloves">Gloves</label>
+                    </div>
+                    <div>
+                    <input type="checkbox" name="gearRental" value="Boots">
+                    <label for="Boots">Boots</label>
+                    <div>
+                    <input type="submit" value="Submit">
+                    </div>
+                </fieldset>
+            </form>
+            `
+        );
+
+        let id = $(this).parent().attr('id');
+        console.log('this is the id:', id);
+
+        $("#update").submit(function (event) {
+            event.preventDefault();
+
+            let values = {
+                motorcycleRentalAnswer: "",
+                gearRental: ""
+            };
+
+            let $inputs = $('#update :input');
+
+            values.motorcycleRentalAnswer = $('input[name=motorcycleRentalAnswer]:checked').val();
+            values.gearRental = []
+
+            let gearRentalDOMArray = $('input[name=gearRental]:checked');
+
+            for (let i = 0; i < gearRentalDOMArray.length; i++) {
+                values.gearRental.push(gearRentalDOMArray[i].value);
+            }
+
+            $.ajax({
+                type: "PUT",
+                url: "http://localhost:8080/registeredEvents" + id,
+                data: JSON.stringify(values),
+                //dataType: 'json',
+                contentType: "application/json",
+                headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` },
+                success: function (data) {
+                    getRegisteredEvents(updateDOM);
+                },
+                error: function (err) {
+                    console.log(err)
+                },
+                beforeSend: function (xhr) {
+                }
+            });
+        });
+    })
+}
+
+
+
+//DELETE
+function deleteRegisteredEvent() {
+    $('body').on('click', '.delete-button', function (event) {
+
+        let id = $(this).parent().attr('id');
+
+        $.ajax({
+            type: "DELETE",
+            url: "http://localhost:8080/registeredEvents" + id,
+            data: {},
+            dataType: 'json',
+            headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` },
+            success: function (data) {
+                //updateDOM(data);
+                getRegisteredEvents(updateDOM)
+            },
+            error: function (err) {
+                console.log(err)
+            },
+            beforeSend: function (xhr) {
+
+            }
+        });
+    })
 }
 
 //on page load do this

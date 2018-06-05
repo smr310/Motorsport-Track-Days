@@ -21,6 +21,9 @@ let token;
 //will eventually need to NOT hardcode the token value
 //let token2 = 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7InVzZXJuYW1lIjoic21yMzEwODgiLCJmaXJzdE5hbWUiOiJzdGV2ZSIsImxhc3ROYW1lIjoicm9tbSIsImlkIjoiNWIwNWVhNmY3MmI3NTkzNTJmZTNhZDU1In0sImlhdCI6MTUyNzExNDM2OCwiZXhwIjoxNTI3NzE5MTY4LCJzdWIiOiJzbXIzMTA4OCJ9.-Eph16lmxDYwPtm0IJ77QtHoo-bC5Y8hCfRCSMg7Bl8';
 
+let testUserObject;
+//let testEventId;
+
 function createUser() {
     console.log("Creating user.");
     let testUser = {
@@ -36,6 +39,8 @@ function createUser() {
             .then((res) => {
                 console.log('Registered user.');
                 loginUser().then(() => {
+                    console.log('this is the user object after new user is created and logged in:', res.body)
+                    testUserObject = res.body;
                     resolve()
                 });
             })
@@ -61,8 +66,9 @@ function loginUser(pw) {
                 console.log('this is res.body', res.body);
                 token = res.body.authToken;
                 console.log('this is the token: ', token);
-                console.log('this it token2: ', token2)
+                //console.log('this it token2: ', token2)
                 //userId = res.body.data.userID;
+                
                 resolve();
             })
             .catch((error) => {
@@ -146,18 +152,40 @@ describe('API resource', function () {
         });
     })
 
+
+
     describe('GET  /upcomingEvents endpoint', function () {
         it('should return all upcoming events', function () {
             return chai.request(app)
                 .get('/upcomingEvents')
                 .set('Authorization', "Bearer " + token)
                 .then(function (res) {
-                    //console.log('this is res.body for GET /upcomingEvents', res.body);
+                    console.log('this is res.body for GET /upcomingEvents', res.body);
+                    //testEventId = res.body.events[1]._id;
+                    //console.log('this is testEventId', testEventId)
                     expect(res).to.have.status(200);
                 })
         });
     })
 
+
+    describe('POST  /registeredEvents/:id', function () {
+        it('should add a new registered event', function () {
+
+            console.log('this should be testUserObject:', testUserObject)
+            console.log('testUserObject.id:', testUserObject.id)
+            return chai.request(app)
+                .post(`/registeredEvents/${testUserObject.id}`)
+                .set('Authorization', "Bearer " + token)
+                //.send(SOME OBJECT -- like data in ajax request);
+                .then(function (res) {
+                   console.log('this is res.body for POST registeredEvents/:id', res.body)
+                   console.log('thiiis is req.user.id: ', req.user.id)
+                })
+
+        });
+    })
+    
     describe('GET  /registeredEvents endpoint', function () {
         it('should return all registered events', function () {
 
@@ -166,13 +194,7 @@ describe('API resource', function () {
         });
     })
 
-    describe('POST  /registeredEvents/:id', function () {
-        it('should add a new registered event', function () {
-
-            return chai.request(app)
-
-        });
-    })
+    
 
     describe('PUT  /registeredEvents:id', function () {
         it('should update the fields you send over', function () {
