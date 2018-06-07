@@ -131,19 +131,20 @@ function displayUpcomingEvents() {
         dataType: 'json',
         success: function (data) {
             console.log(data);
-          $('.login-form-container').hide()
+            $('.login-form-container').show();
+        //   $('.login-form-container').hide()
             $('.dashboard-div').html("");
 
             for (value of data.events) {
                 $('.dashboard-div').append(
                     `
-            <div id=${value._id}>
-                <p> ID: <span >${value._id}</span></p>
-                <p> trackName: ${value.trackName}</p>
-                <p> eventDate: ${value.eventDate}</p>
-                <button class="register-button" type="button">REGISTER</button>
-            </div>
-            `
+                        <div id=${value._id}>
+                            <p class="track-event-id"> ID: <span >${value._id}</span></p>
+                            <p class="track-name"> trackName: ${value.trackName}</p>
+                            <p class="eventData"> eventDate: ${value.eventDate}</p>
+                            <button class="register-button" type="button">REGISTER</button>
+                        </div>
+                     `
                 );
             }
             registerButtonClickHandler();
@@ -152,7 +153,7 @@ function displayUpcomingEvents() {
            
         },
         error: function (err) {
-            $('.login-form-container').show();
+            // $('.login-form-container').show();
             console.log(err)
         },
         beforeSend: function (xhr) {
@@ -162,7 +163,7 @@ function displayUpcomingEvents() {
 }
 
 function getAndDisplayRegisteredEvents() {
-    $('#dashboard-button').on('click', function (event) {
+    $('.dashboard-button').on('click', function (event) {
         $('.dashboard-div').html("");
         getRegisteredEvents(updateDOM);
     })
@@ -222,8 +223,9 @@ function getPositionByElement (data, element) {
 }
 
 function homePageButtonClickHandler() {
-    $('body').on('click', '#homepage-button', function (event) {
-        displayUpcomingEvents()
+    $('body').on('click', '.homepage-button', function (event) {
+        $('.login-form-container').show();
+        // displayUpcomingEvents()
     });
 }
 

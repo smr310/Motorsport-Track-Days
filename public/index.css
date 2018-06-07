@@ -1,7 +1,6 @@
 /*--Universal Styling--*/
 * {
     box-sizing: border-box;
-
     text-decoration: none;
 }
 
@@ -13,8 +12,7 @@ html{
 body {
     margin: 0;
     padding: 0;
-    background: linear-gradient(to left, #000000 0%, #434343 100%);
-    user-select: none;
+    background: darkgrey;
 }
 
 .hidden{
@@ -192,14 +190,13 @@ span a {
     color: white;
     background: black;
     height: 80px;
-    border-bottom: .1px solid #d62631;
+    /* border-bottom: .1px solid #d62631; */
 }
 
 .nav-bar {
     color: white;
     background: black;
     height: 30px;
-    border-bottom: .1px solid #d62631;
     font-size: 15px;
     font-family: "Open Sans",sans-serif;
     font-weight: 400;
@@ -207,8 +204,6 @@ span a {
     cursor: pointer;
     
 }
-
-
 
 .nav-item {
     /* border: .1px solid white; */
@@ -222,6 +217,9 @@ span a {
     transition-property: background-color, box-shadow, border, color, opacity;
     transition-duration: 0.3s;
 }
+/*-- End of Header Styling --*/
+
+
 
 .div-a {
     height: 400px;
@@ -278,3 +276,9 @@ span a {
     /* padding-top: 50px; */
 }
 
+/*-- Upcoming Events Styling --*/
+.track-name {
+    color: green;
+}
+
+/*-- End of Upcoming Events Styling --*/
