@@ -5,23 +5,63 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>Index</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <!-- <link rel="stylesheet" type="text/css" media="screen" href="index.css" /> -->
+    <!-- Stylesheet -->
+    <link rel="stylesheet" type="text/css" media="screen" href="index.css" />
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Oxygen" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Roboto+Condensed" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Roboto+Mono" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Anton" rel="stylesheet">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 </head>
 <body>
-    <h1>Steve's Track Days</h1>
-    <button id="homepage-button">UPCOMING EVENTS</button>
-    <button id="dashboard-button">REGISTERED EVENTS</button>
+    <div class = "top-header">
+        <h1 class ="logo">Steve's Track Days</h1>
+        
+    </div>
+    <div class ="nav-bar">
+        <nav>
+            <a class="nav-item" id="homepage-button">
+                <span>Home</span>
+            </a>
+            <a class="nav-item" id="homepage-button">
+                <span>Upcoming Events</span>
+            </a>
+            <a class="nav-item" id="dashboard-button">
+                <span>Registered Events</span>
+            </a>
+            <a class="nav-item">
+                <span>
+                    Login
+                </span>   
+            </a>
+        </nav>
+    </div>
+    <div class = "div-a">
+        <h3 class = "ride-text">Ride your motorcycle on the racetrack!</h3>
+        <div class="w-btn-wrapper">
+            <button class="w-btn">
+               2018 Event Schedule
+            </button> 
+            </a>
+        </div>
+
+    </div>
+
+    <!-- <h1>Steve's Track Days</h1> -->
+    <!-- <button id="homepage-button">UPCOMING EVENTS</button> -->
+    <!-- <button id="dashboard-button">REGISTERED EVENTS</button> -->
     <button id="signout">Sign Out</button>
     <div class="dashboard-div"></div>
     
-    <div class="container ">
+    <div class="login-form-container">
         <div class="signup-tab">Sign Up</div>
         <div class="login-tab">Log In</div>
         <div class="register-form">
             <form role="form" class="js-register-form">
                 <fieldset>
-                    <legend>Sign Up</legend>
+                    <h3>Sign Up</h3>
                     <label for="inputFirstName">First Name
                         <span class="required">*</span>
                     </label>
@@ -52,7 +92,7 @@
         <div class="login-form">
             <form role="form" class="js-login-form">
                 <fieldset>
-                    <legend>Log In</legend>
+                    <h3>Log In</h3>
                     <label for="inputUsername">Username
                         <span class="required">*</span>
                     </label>
@@ -79,6 +119,9 @@
             </form>
         </div>
     </div>
+
+
+
     <script src="app.js"></script>
 </body>
 </html>

@@ -1,4 +1,28 @@
 
+//Click on Tab Functionality in Login Form
+$('.signup-tab').css('background', '#f9fbfd');
+$('.login-form').hide();
+$('.login-tab').css('background', '#A9A9A9');
+
+
+$('.login-tab').click(event => {
+    event.preventDefault();
+    $('.register-form').hide();
+    $('.login-form').show();
+    $('.signup-tab').css('background', '#A9A9A9');
+    $('.login-tab').css('background', '#f9fbfd');
+});
+
+
+$('.signup-tab').click(event => {
+    event.preventDefault();
+    $('.register-form').show();
+    $('.login-form').hide();
+    $('.login-tab').css('background', '#A9A9A9');
+    $('.signup-tab').css('background', '#f9fbfd');
+});
+
+
 
 //REGISTER New User
 //AJAX POST Request
@@ -79,7 +103,7 @@ function logInExisting(ajaxAuthCall) {
                 localStorage.setItem('token', user.authToken);
                 localStorage.setItem('userID', user.userID);
                 displayUpcomingEvents()
-                //window.location.href = 'home.html'; //directs to home pg
+                $('.login-form-container').hide();
             })
             .fail(function (error) {
                 $('.input').val("");
@@ -106,6 +130,8 @@ function displayUpcomingEvents() {
         data: {},
         dataType: 'json',
         success: function (data) {
+            console.log(data);
+          $('.login-form-container').hide()
             $('.dashboard-div').html("");
 
             for (value of data.events) {
@@ -122,7 +148,11 @@ function displayUpcomingEvents() {
             }
             registerButtonClickHandler();
         },
+        fail: function() {
+           
+        },
         error: function (err) {
+            $('.login-form-container').show();
             console.log(err)
         },
         beforeSend: function (xhr) {
