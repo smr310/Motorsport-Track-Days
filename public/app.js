@@ -68,14 +68,10 @@ $('.js-register-form').submit(function (event) {
                 $('.input').val("");
                 localStorage.setItem('token', user.authToken);
                 localStorage.setItem('userID', user.userID);
-                displayUpcomingEvents()
-                //window.location.href = 'home.html'; //directs to home pg
+                displayUpcomingEvents();
             })
             .fail(function (error) {
-                // $('.input').val("");
-                // $('.login-alert').html(`
-                //         <p class="landing-alert">${error.responseJSON.message}</p>
-                //     `);
+                
             })
     }
 });
@@ -131,18 +127,20 @@ function displayUpcomingEvents() {
         dataType: 'json',
         success: function (data) {
             console.log(data);
-            $('.login-form-container').show();
-        //   $('.login-form-container').hide()
-            $('.dashboard-div').html("");
+            // $('.login-form-container').show();
+            $('.login-form-container').hide()
+            $('.main-div').html("");
 
             for (value of data.events) {
-                $('.dashboard-div').append(
+                $('.main-div').append(
                     `
-                        <div id=${value._id}>
-                            <p class="track-event-id"> ID: <span >${value._id}</span></p>
-                            <p class="track-name"> trackName: ${value.trackName}</p>
-                            <p class="eventData"> eventDate: ${value.eventDate}</p>
-                            <button class="register-button" type="button">REGISTER</button>
+                        <div class="track-event-wrapper">
+                            <div id=${value._id}>
+                                <p class="track-event-id hidden"> ID: <span >${value._id}</span></p>
+                                <p class="track-name">trackName: ${value.trackName}</p>
+                                <p class="eventData"> eventDate: ${value.eventDate}</p>
+                                <button class="register-button" type="button">REGISTER</button>
+                            </div>
                         </div>
                      `
                 );
@@ -163,8 +161,9 @@ function displayUpcomingEvents() {
 }
 
 function getAndDisplayRegisteredEvents() {
-    $('.dashboard-button').on('click', function (event) {
-        $('.dashboard-div').html("");
+    $('.registered-events-button').on('click', function (event) {
+        $('.login-form-container').hide()
+        $('.main-div').html("");
         getRegisteredEvents(updateDOM);
     })
 }
@@ -190,22 +189,24 @@ function getRegisteredEvents(callbackFn) {
 }
 
 function updateDOM(data) {
-    $('.dashboard-div').html("");
+    $('.main-div').html("");
     
     for (value of data.events) {
-        $('.dashboard-div').append(
+        $('.main-div').append(
             `
-            <div id=${value._id}>
-                <p> ID: <span >${value._id}</span></p>
-                <p> trackName: ${value.trackName}</p>
-                <p> eventDate: ${value.eventDate}</p>
-                <p> Will you be renting a motorcycle?: ${value.needToRentBike}</p>
-                <p> Will you be renting a helmet: ${value.needToRentHelmet}</p>
-                <p> Will you be renting a leather suit: ${value.needToRentSuit}</p>
-                <p> Will you be renting gloves: ${value.needToRentGloves}</p>
-                <p> Will you be renting boots: ${value.needToRentBoots}</p>
-                <button class="edit-button" type="button">EDIT</button>
-                <button class="delete-button" type="button">DELETE</button><br><br>
+            <div class="track-event-wrapper">    
+                <div id=${value._id}>
+                    <p> ID: <span >${value._id}</span></p>
+                    <p> trackName: ${value.trackName}</p>
+                    <p> eventDate: ${value.eventDate}</p>
+                    <p> Will you be renting a motorcycle?: ${value.needToRentBike}</p>
+                    <p> Will you be renting a helmet: ${value.needToRentHelmet}</p>
+                    <p> Will you be renting a leather suit: ${value.needToRentSuit}</p>
+                    <p> Will you be renting gloves: ${value.needToRentGloves}</p>
+                    <p> Will you be renting boots: ${value.needToRentBoots}</p>
+                    <button class="edit-button" type="button">EDIT</button>
+                    <button class="delete-button" type="button">DELETE</button><br><br>
+                </div>
             </div>
             `
         );
@@ -222,22 +223,13 @@ function getPositionByElement (data, element) {
     return elementPos;
 }
 
-function homePageButtonClickHandler() {
-    $('body').on('click', '.homepage-button', function (event) {
-        $('.login-form-container').show();
-        // displayUpcomingEvents()
-    });
-}
-
-
-
 //////POST 
 function registerButtonClickHandler() {
     $('body').on('click', '.register-button', function (event) {
 
         //clearn & update DOM to ask for user input 
-        $('.dashboard-div').html("");
-        $('.dashboard-div').append(
+        $('.main-div').html("");
+        $('.main-div').append(
             `
             <form id="registration">
                 <fieldset>
@@ -330,8 +322,8 @@ function registerButtonClickHandler() {
 function editRegisteredEvent() {
     $('body').on('click', '.edit-button', function (event) {
         //ask user for input
-        $('.dashboard-div').html("");
-        $('.dashboard-div').append(
+        $('.main-div').html("");
+        $('.main-div').append(
             `
             <form id="update">
                 <fieldset>
@@ -433,10 +425,46 @@ function deleteRegisteredEvent() {
     })
 }
 
+function homePageButtonClickHandler() {
+    $('body').on('click', '.homepage-button', function (event) {
+        $('.login-form-container').hide();
+        $('.div-a').show();
+        $('.div-b').show();
+        $('.main-div').html("");
+    });
+}
+
+function upcomingEventsHandler() {
+    $('body').on('click', '.upcoming-events-button', function (event) {
+        $('.div-a').hide();
+        $('.div-b').hide();
+        displayUpcomingEvents();
+    });
+}
+
+function eventScheduleHandler() {
+    $('body').on('click', '.event-schedule-btn', function (event) {
+        $('.div-a').hide();
+        $('.div-b').hide();
+        displayUpcomingEvents();
+    });
+}
+
+function loginHandler() {
+    $('body').on('click', '.login-button', function (event) {
+        $('.div-a').hide();
+        $('.div-b').hide();
+        $('.login-form-container').show();
+    });
+}
+
+
 //on page load do this
 $(function () {
     homePageButtonClickHandler();  
-    displayUpcomingEvents();
+    upcomingEventsHandler();
+    loginHandler();
+    eventScheduleHandler();
     getAndDisplayRegisteredEvents();
     deleteRegisteredEvent();
     editRegisteredEvent();
