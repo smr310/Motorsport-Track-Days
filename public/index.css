@@ -12,7 +12,7 @@ html{
 body {
     margin: 0;
     padding: 0;
-    background: darkgrey;
+    background:grey;
 }
 
 .hidden{
@@ -32,11 +32,12 @@ fieldset{
 
 .login-form-container {
     display: none;
-    margin-top: 5%;
+    margin-top: 0px;
     margin-right: auto;
     margin-left: auto;
     width: 500px;
     border-radius: 10px;
+    /* border: 1px solid  black; */
 }
 
 .login-form, .register-form {
@@ -182,6 +183,12 @@ span a {
     text-decoration: none;
     color: #000;
 }
+
+.event-register-form {
+    width: 400px;
+    margin: auto;
+}
+
 /*-- End of Form Styling --*/
 
 
@@ -202,12 +209,14 @@ span a {
     font-weight: 400;
     text-align: center;
     cursor: pointer;
+    border-bottom: 1px solid red;
     
 }
 
 .nav-item {
     /* border: .1px solid white; */
     padding: 10px;
+    padding-bottom: 12px;
 }
 
 .nav-item:hover {
@@ -224,16 +233,19 @@ span a {
 .div-a {
     background: black;
     padding-top: 50px; 
-    border: .1px solid white;
     height: 300px;
 }
 
 .div-b {
     background: #202020;  
     padding-top: 50px; 
-    border: .1px solid white;
     height: 750px;
 }
+
+.div-c {
+    padding-top: 40px;
+}
+
 
 
 .ride-text {
@@ -242,8 +254,26 @@ span a {
     font-family: "Noto Sans",sans-serif;
     font-weight: 400;
     font-size: 38px;
-   
 }
+
+.alert-text,
+.upcoming-text,
+.registered-text {
+    color: white;
+    text-align: center;
+    font-family: "Noto Sans",sans-serif;
+    font-weight: 400;
+    font-size: 22px;
+}
+
+.video-text {
+    color: white;
+    text-align: center;
+    font-family: "Noto Sans",sans-serif;
+    font-weight: 400;
+    font-size: 20px;
+}
+
 
 .w-btn-wrapper {
     text-align: center;
@@ -281,7 +311,8 @@ span a {
 }
 
 .logo {
-    /* padding-top: 50px; */
+    margin: 0px;
+    padding-top: 30px;
 }
 
 /*-- Upcoming Events Styling --*/
@@ -294,10 +325,12 @@ span a {
 
 .main-div {
     margin: auto;
+    padding: 60px;
+    padding-top: 10px;
 }
 
 .track-event-wrapper {
-       border: 1px solid  rgb(87, 175, 247);
+       border: 1px solid  black;
        width: 500px;
        margin: auto;
 }

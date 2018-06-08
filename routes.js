@@ -75,8 +75,8 @@ function routes(app) {
             })
             console.log("this is found event: ", foundEvent)
 
-            if (foundEvent) {
-                console.log('notify the client that they are already registered for this event')
+            if (foundEvent) {                console.log('notify the client that they are already registered for this event')
+
             } else {
                 User.findByIdAndUpdate(req.user.id,
                     {

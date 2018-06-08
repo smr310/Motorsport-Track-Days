@@ -127,8 +127,11 @@ function displayUpcomingEvents() {
         dataType: 'json',
         success: function (data) {
             console.log(data);
-            // $('.login-form-container').show();
+            $('.registered-text').hide();
+            $('.upcoming-text').show();
             $('.login-form-container').hide()
+            $('.div-c').hide();
+            $('.main-div').show();
             $('.main-div').html("");
 
             for (value of data.events) {
@@ -148,11 +151,13 @@ function displayUpcomingEvents() {
             registerButtonClickHandler();
         },
         fail: function() {
-           
+            console.log('fail')
         },
         error: function (err) {
-            // $('.login-form-container').show();
-            console.log(err)
+            console.log('error')
+            $('.main-div').hide();
+            $('.div-c').show();
+            $('.login-form-container').show();
         },
         beforeSend: function (xhr) {
 
@@ -162,6 +167,7 @@ function displayUpcomingEvents() {
 
 function getAndDisplayRegisteredEvents() {
     $('.registered-events-button').on('click', function (event) {
+        
         $('.login-form-container').hide()
         $('.main-div').html("");
         getRegisteredEvents(updateDOM);
@@ -176,11 +182,17 @@ function getRegisteredEvents(callbackFn) {
         data: {},
         dataType: 'json',
         success: function (data) {
+            $('.registered-text').show();
             callbackFn(data) 
             
         },
         error: function (err) {
-            console.log(err)
+            console.log(err);
+            console.log('error');
+            // $('.div-c').hide();
+            $('.div-c').show();
+            $('.main-div').hide();
+            $('.login-form-container').show();
         },
         beforeSend: function (xhr) {
         
@@ -232,7 +244,7 @@ function registerButtonClickHandler() {
         $('.main-div').append(
             `
             <form id="registration">
-                <fieldset>
+                <fieldset class="event-register-form">
                     First name:<br>
                     <input type="text" name="firstName" value="">
                     <br><br>
@@ -425,9 +437,13 @@ function deleteRegisteredEvent() {
     })
 }
 
+
 function homePageButtonClickHandler() {
     $('body').on('click', '.homepage-button', function (event) {
+        $('.upcoming-text').hide();
+        $('.registered-text').hide();
         $('.login-form-container').hide();
+        $('.div-c').hide();
         $('.div-a').show();
         $('.div-b').show();
         $('.main-div').html("");
@@ -436,10 +452,22 @@ function homePageButtonClickHandler() {
 
 function upcomingEventsHandler() {
     $('body').on('click', '.upcoming-events-button', function (event) {
+        $('.login-form-container').hide();
         $('.div-a').hide();
         $('.div-b').hide();
         displayUpcomingEvents();
     });
+}
+
+function registeredEventsHandler() {
+    $('.registered-events-button').on('click', function (event) {
+        $('.upcoming-text').hide();
+        $('.login-form-container').hide()
+        $('.div-a').hide();
+        $('.div-b').hide();
+        // $('.main-div').html("");
+        getRegisteredEvents(updateDOM);
+    })
 }
 
 function eventScheduleHandler() {
@@ -454,9 +482,11 @@ function loginHandler() {
     $('body').on('click', '.login-button', function (event) {
         $('.div-a').hide();
         $('.div-b').hide();
+        $('.div-c').hide();
         $('.login-form-container').show();
     });
 }
+
 
 
 //on page load do this
@@ -465,7 +495,7 @@ $(function () {
     upcomingEventsHandler();
     loginHandler();
     eventScheduleHandler();
-    getAndDisplayRegisteredEvents();
+    registeredEventsHandler();
     deleteRegisteredEvent();
     editRegisteredEvent();
 })
