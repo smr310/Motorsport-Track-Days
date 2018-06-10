@@ -126,7 +126,6 @@ function displayUpcomingEvents() {
         data: {},
         dataType: 'json',
         success: function (data) {
-            console.log(data);
             $('.registered-text').hide();
             $('.upcoming-text').show();
             $('.login-form-container').hide()
@@ -141,7 +140,7 @@ function displayUpcomingEvents() {
                             <div id=${value._id}>
                                 <p class="track-event-id hidden"> ID: <span >${value._id}</span></p>
                                 <p class="track-name">trackName: ${value.trackName}</p>
-                                <p class="eventData"> eventDate: ${value.eventDate}</p>
+                                <p class="eventData"> ${moment(value.eventDate)}</p>
                                 <button class="register-button" type="button">REGISTER</button>
                             </div>
                         </div>
@@ -182,6 +181,7 @@ function getRegisteredEvents(callbackFn) {
         data: {},
         dataType: 'json',
         success: function (data) {
+            $('.upcoming-text').hide();
             $('.registered-text').show();
             callbackFn(data) 
             
@@ -204,13 +204,14 @@ function updateDOM(data) {
     $('.main-div').html("");
     
     for (value of data.events) {
+        console.log('this is value:', value)
         $('.main-div').append(
             `
             <div class="track-event-wrapper">    
                 <div id=${value._id}>
-                    <p> ID: <span >${value._id}</span></p>
-                    <p> trackName: ${value.trackName}</p>
-                    <p> eventDate: ${value.eventDate}</p>
+                
+                    <p class="track-name"> ${value.trackName}</p>
+                    <p> ${moment(value.eventDate)}</p>
                     <p> Will you be renting a motorcycle?: ${value.needToRentBike}</p>
                     <p> Will you be renting a helmet: ${value.needToRentHelmet}</p>
                     <p> Will you be renting a leather suit: ${value.needToRentSuit}</p>
@@ -258,19 +259,19 @@ function registerButtonClickHandler() {
                     If you need to rent safety gear, please select all items you will need to rent: <br>
                     <div>
                         <input type="checkbox" name="gearRental" value="Helmet">
-                        <label for="helmet">Helmet</label>
+                        <label class="rental-label" for="helmet">Helmet</label>
                     </div>
                     <div>
                         <input type="checkbox" name="gearRental" value="Leather-Racing-Suit">
-                        <label for="Leather-Racing-Suit">Leather Racing Suit</label>
+                        <label class="rental-label" for="Leather-Racing-Suit">Leather Racing Suit</label>
                     </div>
                     <div>
                     <input type="checkbox" name="gearRental" value="Gloves">
-                    <label for="gloves">Gloves</label>
+                    <label class="rental-label" for="gloves">Gloves</label>
                     </div>
                     <div>
                     <input type="checkbox" name="gearRental" value="Boots">
-                    <label for="Boots">Boots</label>
+                    <label class="rental-label" for="Boots">Boots</label>
                     <div>
                     <input type="submit" value="Submit">
                     </div>
@@ -282,15 +283,15 @@ function registerButtonClickHandler() {
         let id = $(this).parent().attr('id');
         let trackName = $($(this).parent().find('p')[1]).html();
         let trackNameString = trackName.split("trackName: ")[1]
+        console.log("this is the log:", $($(this).parent().find('p')[2]).html());
         let eventDate = $($(this).parent().find('p')[2]).html();
-        let eventDateString = eventDate.split("eventDate: ")[1];
         
         $("#registration").submit(function (event) {
             event.preventDefault();
 
             let values = {
                 trackName: trackNameString,
-                eventDate: eventDateString,
+                eventDate: eventDate,
                 motorcycleRentalAnswer: "",
                 gearRental: ""
             };
@@ -314,6 +315,7 @@ function registerButtonClickHandler() {
                 contentType: "application/json",
                 headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` },
                 success: function (data) {
+                   
                     getRegisteredEvents(updateDOM)
                     console.log("this is ajax success function line one");
                     console.log('this is data from AJAX POST request', data)
@@ -338,7 +340,7 @@ function editRegisteredEvent() {
         $('.main-div').append(
             `
             <form id="update">
-                <fieldset>
+                <fieldset class="event-update-form">
                     Will you be renting a motorcycle with us: <br>
                     <input type="radio" name="motorcycleRentalAnswer" value="Yes">Yes<br>
                     <input type="radio" name="motorcycleRentalAnswer" value="No">No, I will be riding my own motorcylce<br>
@@ -346,19 +348,19 @@ function editRegisteredEvent() {
                     If you need to rent safety gear, please select all items you will need to rent: <br>
                     <div>
                         <input type="checkbox" name="gearRental" value="Helmet">
-                        <label for="helmet">Helmet</label>
+                        <label class="rental-label" for="helmet">Helmet</label>
                     </div>
                     <div>
                         <input type="checkbox" name="gearRental" value="Leather-Racing-Suit">
-                        <label for="Leather-Racing-Suit">Leather Racing Suit</label>
+                        <label class="rental-label" for="Leather-Racing-Suit">Leather Racing Suit</label>
                     </div>
                     <div>
                     <input type="checkbox" name="gearRental" value="Gloves">
-                    <label for="gloves">Gloves</label>
+                    <label class="rental-label" for="gloves">Gloves</label>
                     </div>
                     <div>
                     <input type="checkbox" name="gearRental" value="Boots">
-                    <label for="Boots">Boots</label>
+                    <label class="rental-label" for="Boots">Boots</label>
                     <div>
                     <input type="submit" value="Submit">
                     </div>
@@ -461,11 +463,11 @@ function upcomingEventsHandler() {
 
 function registeredEventsHandler() {
     $('.registered-events-button').on('click', function (event) {
+        $('.main-div').html("");
         $('.upcoming-text').hide();
         $('.login-form-container').hide()
         $('.div-a').hide();
         $('.div-b').hide();
-        // $('.main-div').html("");
         getRegisteredEvents(updateDOM);
     })
 }

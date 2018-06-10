@@ -12,7 +12,7 @@ html{
 body {
     margin: 0;
     padding: 0;
-    background:grey;
+    background:black;
 }
 
 .hidden{
@@ -22,7 +22,7 @@ body {
 fieldset{
     margin: 0px;
     border: none;
-    text-align: center;
+    text-align: left;
     background-color: #f9fbfd;
 }
 /*--End of Universal Styling--*/
@@ -184,7 +184,8 @@ span a {
     color: #000;
 }
 
-.event-register-form {
+.event-register-form,
+.event-update-form {
     width: 400px;
     margin: auto;
 }
@@ -323,6 +324,21 @@ span a {
 /*-- End of Upcoming Events Styling --*/
 
 
+
+
+
+/* Rental Form Styling */
+.rental-label {
+    display: inline;
+    float: none;
+}
+
+
+
+/* End of Rental Form Styling */
+
+
+
 .main-div {
     margin: auto;
     padding: 60px;
@@ -330,9 +346,20 @@ span a {
 }
 
 .track-event-wrapper {
-       border: 1px solid  black;
+       border: 1px solid  red;
        width: 500px;
        margin: auto;
+       color: white;
+       margin-bottom: 40px;
+       background:
+        linear-gradient(27deg, #151515 5px, transparent 5px) 0 5px,
+        linear-gradient(207deg, #151515 5px, transparent 5px) 10px 0px,
+        linear-gradient(27deg, #222 5px, transparent 5px) 0px 10px,
+        linear-gradient(207deg, #222 5px, transparent 5px) 10px 5px,
+        linear-gradient(90deg, #1b1b1b 10px, transparent 10px),
+        linear-gradient(#1d1d1d 25%, #1a1a1a 25%, #1a1a1a 50%, transparent 50%, transparent 75%, #242424 75%, #242424);
+        background-color: #131313;
+        background-size: 20px 20px;
 }
 
 
