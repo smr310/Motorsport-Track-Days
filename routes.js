@@ -8,7 +8,7 @@ const jwtAuth = passport.authenticate('jwt', { session: false });
 function routes(app) {
 
     app.get('/upcomingEvents', jwtAuth, (req, res) => {
-        console.log('HITTING THE ENDPOINT');
+        //console.log('HITTING THE ENDPOINT');
         UpcomingEvent.find(function (err, docs) {
             if (!err) {
                 //console.log('this is docs from GET /upcomingEvents', docs);
@@ -37,8 +37,11 @@ function routes(app) {
 
     app.post('/registeredEvents/:id', jwtAuth, (req, res) => {
 
-        console.log('this is req.body from POST /registeredEvents/:id', req.body)
-        console.log('here is the track name: ', req.body.trackName)
+        // console.log('this is req.body from POST /registeredEvents/:id', req.body)
+        // console.log('here is the track name: ', req.body.trackName)
+        console.log('this is req.body.firstName: ', req.body.firstName)
+
+        
 
         let needToRentBike = false;
         let needToRentHelmet = false;
@@ -64,8 +67,8 @@ function routes(app) {
             }
         });
 
-        console.log('this is passports req.user', req.user);
-        console.log('this is req.param.id', req.params.id);
+        // console.log('this is passports req.user', req.user);
+        // console.log('this is req.param.id', req.params.id);
 
         User.findById(req.user.id).then(function (user) {
             const foundEvent = user.registeredEvents.find((event) => {
@@ -83,12 +86,14 @@ function routes(app) {
                         $push: {
                             registeredEvents: [{
                                 trackName: req.body.trackName,
+                                firstName: req.body.firstName,
+                                lastName: req.body.lastName,
                                 eventDate: req.body.eventDate,
                                 needToRentBike: needToRentBike,
                                 needToRentHelmet: needToRentHelmet,
                                 needToRentSuit: needToRentSuit,
                                 needToRentGloves: needToRentGloves,
-                                needToRentBoots: needToRentBoots
+                                needToRentBoots: needToRentBoots,
                             }]
                         }
                     }).then(function (doc) {
@@ -108,11 +113,16 @@ function routes(app) {
         let id = req.params.id
         console.log('this is the id of the event to change', id)
 
+        console.log("this is the req.body that I want", req.body)
+
         let needToRentBike = false;
         let needToRentHelmet = false;
         let needToRentBoots = false;
         let needToRentGloves = false;
         let needToRentSuit = false;
+
+        let firstName = req.body.firstName;
+        let lastName = req.body.lastName;
 
         if (req.body.motorcycleRentalAnswer === 'Yes') {
             needToRentBike = true;
@@ -142,7 +152,8 @@ function routes(app) {
                         "registeredEvents.$.needToRentBoots": needToRentBoots,
                         "registeredEvents.$.needToRentGloves": needToRentGloves,
                         "registeredEvents.$.needToRentSuit": needToRentSuit,
-
+                        "registeredEvents.$.firstName": firstName,
+                        "registeredEvents.$.lastName": lastName
                     }
             }).then(function (doc) { });
         res.end();

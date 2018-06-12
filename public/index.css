@@ -280,7 +280,7 @@ span a {
     text-align: center;
 }
 
-.w-btn, .register-button {
+.w-btn, .register-button, .edit-button, .delete-button, .submit-button {
     font-family: "Open Sans",sans-serif;
     color: white;
     background-color: #f02011;
@@ -318,7 +318,7 @@ span a {
 
 /*-- Upcoming Events Styling --*/
 .track-name {
-    font-size: 20px;
+    font-size: 24px;
 }
 
 /*-- End of Upcoming Events Styling --*/
@@ -327,15 +327,18 @@ span a {
 
 
 
-/* Rental Form Styling */
+/* Additional Form Styling */
 .rental-label {
     display: inline;
     float: none;
 }
 
+.event-form-title {
+    font-size: 20px;
+}
 
 
-/* End of Rental Form Styling */
+/* End of Additional Form Styling */
 
 
 

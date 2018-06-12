@@ -202,23 +202,59 @@ function getRegisteredEvents(callbackFn) {
 
 function updateDOM(data) {
     $('.main-div').html("");
-    
+
     for (value of data.events) {
-        console.log('this is value:', value)
+
+        if (value.needToRentBike === true) {
+            value.needToRentBike = "Yes";
+        } else {
+            value.needToRentBike = "No";
+        }
+
+        if (value.needToRentHelmet === true) {
+            value.needToRentHelmet = "Yes";
+        } else {
+            value.needToRentHelmet = "No";
+        }
+
+        if (value.needToRentSuit === true) {
+            value.needToRentSuit = "Yes";
+        } else {
+            value.needToRentSuit = "No";
+        }        
+
+        if (value.needToRentGloves === true) {
+            value.needToRentGloves = "Yes";
+        } else {
+            value.needToRentGloves = "No";
+        }
+
+        if (value.needToRentBoots === true) {
+            value.needToRentBoots = "Yes";
+        } else {
+            value.needToRentBoots = "No";
+        }
+
+
+
+        console.log('this is data.events, looking for names', data.events)
         $('.main-div').append(
             `
             <div class="track-event-wrapper">    
                 <div id=${value._id}>
-                
                     <p class="track-name"> ${value.trackName}</p>
                     <p> ${moment(value.eventDate)}</p>
+                    <br>
+                    <p> First Name: ${value.firstName} <p>
+                    <p> Last Name: ${value.lastName} <p>
+                    <br>
                     <p> Will you be renting a motorcycle?: ${value.needToRentBike}</p>
                     <p> Will you be renting a helmet: ${value.needToRentHelmet}</p>
                     <p> Will you be renting a leather suit: ${value.needToRentSuit}</p>
                     <p> Will you be renting gloves: ${value.needToRentGloves}</p>
                     <p> Will you be renting boots: ${value.needToRentBoots}</p>
-                    <button class="edit-button" type="button">EDIT</button>
-                    <button class="delete-button" type="button">DELETE</button><br><br>
+                    <button class="edit-button" type="button">EDIT DETAILS</button>
+                    <button class="delete-button" type="button">CANCEL YOUR RESERVATION</button><br><br>
                 </div>
             </div>
             `
@@ -245,7 +281,9 @@ function registerButtonClickHandler() {
         $('.main-div').append(
             `
             <form id="registration">
+                
                 <fieldset class="event-register-form">
+                    <p class="event-form-title">Registration Details</p>
                     First name:<br>
                     <input type="text" name="firstName" value="">
                     <br><br>
@@ -273,7 +311,7 @@ function registerButtonClickHandler() {
                     <input type="checkbox" name="gearRental" value="Boots">
                     <label class="rental-label" for="Boots">Boots</label>
                     <div>
-                    <input type="submit" value="Submit">
+                    <input class="submit-button" type="submit" value="Submit">
                     </div>
                 </fieldset>
             </form>
@@ -283,7 +321,7 @@ function registerButtonClickHandler() {
         let id = $(this).parent().attr('id');
         let trackName = $($(this).parent().find('p')[1]).html();
         let trackNameString = trackName.split("trackName: ")[1]
-        console.log("this is the log:", $($(this).parent().find('p')[2]).html());
+        // console.log("this is the log:", $($(this).parent().find('p')[2]).html());
         let eventDate = $($(this).parent().find('p')[2]).html();
         
         $("#registration").submit(function (event) {
@@ -299,13 +337,17 @@ function registerButtonClickHandler() {
             let $inputs = $('#update :input');
 
             values.motorcycleRentalAnswer = $('input[name=motorcycleRentalAnswer]:checked').val();
+            values.firstName = $('input[name=firstName]').val();
+            values.lastName = $('input[name=lastName]').val();
             values.gearRental = []
 
-            let gearRentalDOMArray = $('input[name=gearRental]:checked');
+            let gearRentalDOMArray = $('uinpt[name=gearRental]:checked');
 
             for (let i = 0; i < gearRentalDOMArray.length; i++) {
                 values.gearRental.push(gearRentalDOMArray[i].value);
             }
+          
+            console.log('this is values before POST AJAX call fires:', values)
 
             $.ajax({
                 type: "POST",
@@ -315,10 +357,9 @@ function registerButtonClickHandler() {
                 contentType: "application/json",
                 headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` },
                 success: function (data) {
-                   
+                    console.log('this is --  data from AJAX POST request', data)
                     getRegisteredEvents(updateDOM)
-                    console.log("this is ajax success function line one");
-                    console.log('this is data from AJAX POST request', data)
+                
                 },
                 error: function (err) {
                     console.log(err)
@@ -341,6 +382,12 @@ function editRegisteredEvent() {
             `
             <form id="update">
                 <fieldset class="event-update-form">
+                    First name:<br>
+                    <input type="text" name="firstName" value="">
+                    <br><br>
+                    Last name:<br>
+                    <input type="text" name="lastName" value="">
+                    <br><br>
                     Will you be renting a motorcycle with us: <br>
                     <input type="radio" name="motorcycleRentalAnswer" value="Yes">Yes<br>
                     <input type="radio" name="motorcycleRentalAnswer" value="No">No, I will be riding my own motorcylce<br>
@@ -362,7 +409,7 @@ function editRegisteredEvent() {
                     <input type="checkbox" name="gearRental" value="Boots">
                     <label class="rental-label" for="Boots">Boots</label>
                     <div>
-                    <input type="submit" value="Submit">
+                    <input class="submit-button" type="submit" value="Submit">
                     </div>
                 </fieldset>
             </form>
@@ -383,6 +430,8 @@ function editRegisteredEvent() {
             let $inputs = $('#update :input');
 
             values.motorcycleRentalAnswer = $('input[name=motorcycleRentalAnswer]:checked').val();
+            values.firstName = $('input[name=firstName]').val();
+            values.lastName = $('input[name=lastName]').val();
             values.gearRental = []
 
             let gearRentalDOMArray = $('input[name=gearRental]:checked');
