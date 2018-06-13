@@ -175,7 +175,7 @@ function getAndDisplayRegisteredEvents() {
 function getRegisteredEvents(callbackFn) {
     $.ajax({
         type: "GET",
-        url: "http://localhost:8080/registeredEvents",
+        url: "/registeredEvents",
         headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` },
         data: {},
         dataType: 'json',
@@ -346,7 +346,7 @@ function registerButtonClickHandler() {
 
             $.ajax({
                 type: "POST",
-                url: "http://localhost:8080/registeredEvents/" + id,
+                url: "registeredEvents/" + id,
                 data: JSON.stringify(values),
                 //dataType: 'json',
                 contentType: "application/json",
@@ -435,7 +435,7 @@ function editRegisteredEvent() {
 
             $.ajax({
                 type: "PUT",
-                url: "http://localhost:8080/registeredEvents" + id,
+                url: "/registeredEvents" + id,
                 data: JSON.stringify(values),
                 //dataType: 'json',
                 contentType: "application/json",
@@ -463,7 +463,7 @@ function deleteRegisteredEvent() {
 
         $.ajax({
             type: "DELETE",
-            url: "http://localhost:8080/registeredEvents" + id,
+            url: "/registeredEvents" + id,
             data: {},
             dataType: 'json',
             headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` },
