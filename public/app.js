@@ -139,7 +139,7 @@ function displayUpcomingEvents() {
                             <div id=${value._id}>
                                 <p class="track-event-id hidden"> ID: <span >${value._id}</span></p>
                                 <p class="track-name">${value.trackName}</p>
-                                <p class="eventData"> ${moment(value.eventDate)}</p>
+                                <p class="eventData"> ${moment(value.eventDate).format("MMM Do YY")}</p>
                                 <button class="register-button" type="button">REGISTER</button>
                             </div>
                         </div>
@@ -240,7 +240,7 @@ function updateDOM(data) {
             <div class="track-event-wrapper">    
                 <div id=${value._id}>
                     <p class="track-name"> ${value.trackName}</p>
-                    <p> ${moment(value.eventDate)}</p>
+                    <p> ${value.eventDate}</p>
                     <br>
                     <p> First Name: ${value.firstName} <p>
                     <p> Last Name: ${value.lastName} <p>

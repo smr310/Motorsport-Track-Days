@@ -19,7 +19,7 @@ const UserSchema = mongoose.Schema({
             trackName: { type: String},
             firstName: { type: String},
             lastName: { type: String},
-            eventDate: { type: Date },
+            eventDate: { type: String },
             needToRentBike: { type: Boolean},
             needToRentHelmet: { type: Boolean},
             needToRentSuit: { type: Boolean},
