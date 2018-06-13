@@ -5,10 +5,151 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>Index</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" type="text/css" media="screen" href="main.css" />
-    <script src="main.js"></script>
+    <!-- Stylesheet -->
+    <link rel="stylesheet" type="text/css" media="screen" href="index.css" />
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Oxygen" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Roboto+Condensed" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Roboto+Mono" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Anton" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.2/moment.min.js"></script>
 </head>
 <body>
-    <p>Home Page -- See all events here</p>
+    <div class = "top-header">
+        <h1 class ="logo">Steve's Track Days</h1>
+    </div>
+    <div class ="nav-bar">
+        <nav>
+            <a class="nav-item homepage-button">
+                <span>Home</span>
+            </a>
+            <a class="nav-item upcoming-events-button">
+                <span>Upcoming Events</span>
+            </a>
+            <a class="nav-item registered-events-button">
+                <span>Registered Events</span>
+            </a>
+            <a class="nav-item">
+                <span class="login-button">
+                    Login
+                </span>   
+            </a>
+            <a class="nav-item" id="signout">
+                <span>
+                    Sign out
+                </span>
+            </a>
+        </nav>
+    </div>
+
+    <div>
+        <h3 class="hidden upcoming-text">Upcoming Events</h3>
+    </div>
+
+    <div>
+        <h3 class="hidden registered-text">Registered Events</h3>
+    </div>
+
+    <div class = "div-a">
+        <h3 class = "ride-text">Ride your motorcycle on the racetrack!</h3>
+        <div class="w-btn-wrapper">
+            <button class="w-btn event-schedule-btn">
+               2018 Event Schedule
+            </button>
+        </div>
+    </div>
+
+    <div class="div-b">
+        <h2 class="video-text">Check out Ordos International Circuit located in China's Innermongolia Province in the video below</h2>
+        <div class='video-wrapper'>
+            <div id="video-outer-container">
+                <div class="video-container">
+                    <iframe width="500" height="300" src="https://www.youtube.com/embed/CslKVrXqRgo" frameborder="0" allowfullscreen></iframe>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="div-c hidden">
+        <h3 class="alert-text">Please log in or sign up to view upcoming and registered events</h3>
+    </div>
+
+    <!-- <h1>Steve's Track Days</h1> -->
+    <!-- <button id="homepage-button">UPCOMING EVENTS</button> -->
+    <!-- <button id="signout">Sign Out</button> -->
+    <div class="main-div"></div>
+    
+    <div class="login-form-container hidden">
+        <div class="signup-tab">Sign Up</div>
+        <div class="login-tab">Log In</div>
+        <div class="register-form">
+            <form role="form" class="js-register-form">
+                <fieldset>
+                    <h3>Sign Up</h3>
+                    <label for="inputFirstName">First Name
+                        <span class="required">*</span>
+                    </label>
+                    <input type="text" class="inputFirstName input" placeholder="" required />
+                    <br/>
+                    <label for="inputLastName">Last Name
+                        <span class="required">*</span>
+                    </label>
+                    <input type="text" class="inputLastName input" placeholder="" required />
+                    <br/>
+                    <label for="inputUsername">Username
+                        <span class="required">*</span>
+                    </label>
+                    <input type="text" class="inputUsername input" placeholder="" required />
+                    <br/>
+                    <label for="inputPassword">Password
+                        <span class="required">*</span>
+                        <span class="characters">&nbsp; Must be at least 6 characters long.</span>
+                    </label>
+                    <input type="password" class="inputPassword input" placeholder="" required />
+                    <br/>
+                    <div class="register-alert"></div>
+                    <br/>
+                    <button type="submit" class="create-account-btn">Create Account</button>
+                </fieldset>
+            </form>
+        </div>
+        <div class="login-form">
+            <form role="form" class="js-login-form">
+                <fieldset>
+                    <h3>Log In</h3>
+                    <label for="inputUsername">Username
+                        <span class="required">*</span>
+                    </label>
+                    <input type="text" class="inputUsername input" placeholder="" required/>
+                    <br/>
+                    <label for="inputPassword">Password
+                        <span class="required">*</span>
+                    </label>
+                    <input type="password" class="inputPassword input" placeholder="" required />
+                    <br/>
+                    <div class="login-alert"></div>
+                    <br/>
+                    <div class="demo-cred">
+                        <p class="demo-hdr">Demo Credentials</p>
+                        <p class="demo-username">Username:&nbsp;
+                            <span class="demo">guest</span>
+                        </p>
+                        <p class="demo-pass">Password:&nbsp;
+                            <span class="demo">racing</span>
+                        </p>
+                    </div>
+                    <button type="submit" class="login-btn">log in</button>
+                </fieldset>
+            </form>
+        </div>
+    </div>
+
+
+
+    <script src="app.js"></script>
 </body>
 </html>
+
+
