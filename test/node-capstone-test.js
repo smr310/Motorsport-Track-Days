@@ -180,7 +180,7 @@ describe('API resource', function () {
                 //.send(SOME OBJECT -- like data in ajax request);
                 .then(function (res) {
                    console.log('this is res.body for POST registeredEvents/:id', res.body)
-                   console.log('thiiis is req.user.id: ', req.user.id)
+                //    console.log('thiiis is req.user.id: ', req.user.id)
                 })
 
         });
