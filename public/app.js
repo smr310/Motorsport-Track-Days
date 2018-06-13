@@ -120,7 +120,7 @@ $('#signout').on('click', event => {
 function displayUpcomingEvents() {
     $.ajax({
         type: "GET",
-        url: "http://localhost:8080/upcomingEvents",
+        url: "/upcomingEvents",
         headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` },
         data: {},
         dataType: 'json',
