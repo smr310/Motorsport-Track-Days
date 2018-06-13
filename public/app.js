@@ -49,7 +49,6 @@ $('.js-register-form').submit(function (event) {
         })
         .fail(function (error) {
             $('.input').val("");
-            console.log(error);
             $('.register-alert').html("");
             $('.register-alert').html(`
                     <p class="landing-alert">${error.responseJSON.message}</p>
@@ -94,8 +93,8 @@ function logInExisting(ajaxAuthCall) {
         })
             .done(function (user) {
                 $('.input').val("");
-                console.log('this is user for existing login', user)
-                console.log('this is user.userID : ', user.userID)
+                //console.log('this is user for existing login', user)
+                //console.log('this is user.userID : ', user.userID)
                 localStorage.setItem('token', user.authToken);
                 localStorage.setItem('userID', user.userID);
                 displayUpcomingEvents()
@@ -139,7 +138,7 @@ function displayUpcomingEvents() {
                         <div class="track-event-wrapper">
                             <div id=${value._id}>
                                 <p class="track-event-id hidden"> ID: <span >${value._id}</span></p>
-                                <p class="track-name">trackName: ${value.trackName}</p>
+                                <p class="track-name">${value.trackName}</p>
                                 <p class="eventData"> ${moment(value.eventDate)}</p>
                                 <button class="register-button" type="button">REGISTER</button>
                             </div>
@@ -150,10 +149,10 @@ function displayUpcomingEvents() {
             registerButtonClickHandler();
         },
         fail: function() {
-            console.log('fail')
+            //console.log('fail')
         },
         error: function (err) {
-            console.log('error')
+            //console.log('error')
             $('.main-div').hide();
             $('.div-c').show();
             $('.login-form-container').show();
@@ -187,8 +186,8 @@ function getRegisteredEvents(callbackFn) {
             
         },
         error: function (err) {
-            console.log(err);
-            console.log('error');
+            //console.log(err);
+            //console.log('error');
             // $('.div-c').hide();
             $('.div-c').show();
             $('.main-div').hide();
@@ -236,8 +235,6 @@ function updateDOM(data) {
         }
 
 
-
-        console.log('this is data.events, looking for names', data.events)
         $('.main-div').append(
             `
             <div class="track-event-wrapper">    
@@ -320,15 +317,15 @@ function registerButtonClickHandler() {
 
         let id = $(this).parent().attr('id');
         let trackName = $($(this).parent().find('p')[1]).html();
-        let trackNameString = trackName.split("trackName: ")[1]
-        // console.log("this is the log:", $($(this).parent().find('p')[2]).html());
+        
         let eventDate = $($(this).parent().find('p')[2]).html();
+        //console.log('this is eventDate', eventDate)
         
         $("#registration").submit(function (event) {
             event.preventDefault();
 
             let values = {
-                trackName: trackNameString,
+                trackName: trackName,
                 eventDate: eventDate,
                 motorcycleRentalAnswer: "",
                 gearRental: ""
@@ -341,13 +338,11 @@ function registerButtonClickHandler() {
             values.lastName = $('input[name=lastName]').val();
             values.gearRental = []
 
-            let gearRentalDOMArray = $('uinpt[name=gearRental]:checked');
+            let gearRentalDOMArray = $('input[name=gearRental]:checked');
 
             for (let i = 0; i < gearRentalDOMArray.length; i++) {
                 values.gearRental.push(gearRentalDOMArray[i].value);
             }
-          
-            console.log('this is values before POST AJAX call fires:', values)
 
             $.ajax({
                 type: "POST",
@@ -357,7 +352,6 @@ function registerButtonClickHandler() {
                 contentType: "application/json",
                 headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` },
                 success: function (data) {
-                    console.log('this is --  data from AJAX POST request', data)
                     getRegisteredEvents(updateDOM)
                 
                 },
@@ -417,7 +411,6 @@ function editRegisteredEvent() {
         );
 
         let id = $(this).parent().attr('id');
-        console.log('this is the id:', id);
 
         $("#update").submit(function (event) {
             event.preventDefault();

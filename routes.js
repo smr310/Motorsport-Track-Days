@@ -37,12 +37,6 @@ function routes(app) {
 
     app.post('/registeredEvents/:id', jwtAuth, (req, res) => {
 
-        // console.log('this is req.body from POST /registeredEvents/:id', req.body)
-        // console.log('here is the track name: ', req.body.trackName)
-        console.log('this is req.body.firstName: ', req.body.firstName)
-
-        
-
         let needToRentBike = false;
         let needToRentHelmet = false;
         let needToRentBoots = false;
@@ -70,50 +64,36 @@ function routes(app) {
         // console.log('this is passports req.user', req.user);
         // console.log('this is req.param.id', req.params.id);
 
-        User.findById(req.user.id).then(function (user) {
-            const foundEvent = user.registeredEvents.find((event) => {
-                //line below defines _eventDate in string format without surrounding quotes to be compared to req.body.eventDate
-                const _eventDate = JSON.stringify(event.eventDate).replace(/['"]+/g, '')
-                return event.trackName === req.body.trackName && _eventDate === req.body.eventDate
-            })
-            console.log("this is found event: ", foundEvent)
-
-            if (foundEvent) {                
-                console.log('notify the client that they are already registered for this event');
-            } else {
-                User.findByIdAndUpdate(req.user.id,
-                    {
-                        $push: {
-                            registeredEvents: [{
-                                trackName: req.body.trackName,
-                                firstName: req.body.firstName,
-                                lastName: req.body.lastName,
-                                eventDate: req.body.eventDate,
-                                needToRentBike: needToRentBike,
-                                needToRentHelmet: needToRentHelmet,
-                                needToRentSuit: needToRentSuit,
-                                needToRentGloves: needToRentGloves,
-                                needToRentBoots: needToRentBoots,
-                            }]
-                        }
-                    }).then(function (doc) {
-                        console.log('this is doc from User.findByIdAndUpdate', doc);
-                        let myObj = {
-                            events: doc
-                        }
-                        res.send(myObj)
-                    })
-            }
-        })
+      
+            User.findByIdAndUpdate(req.user.id,
+                {
+                    $push: {
+                        registeredEvents: [{
+                            trackName: req.body.trackName,
+                            firstName: req.body.firstName,
+                            lastName: req.body.lastName,
+                            eventDate: req.body.eventDate,
+                            needToRentBike: needToRentBike,
+                            needToRentHelmet: needToRentHelmet,
+                            needToRentSuit: needToRentSuit,
+                            needToRentGloves: needToRentGloves,
+                            needToRentBoots: needToRentBoots,
+                        }]
+                    }
+                }).then(function (doc) {
+                    let myObj = {
+                        events: doc
+                    }
+                    res.send(myObj)
+                })
     })
 
 
     app.put('/registeredEvents:id', jwtAuth, (req, res) => {
 
         let id = req.params.id
-        console.log('this is the id of the event to change', id)
+        //console.log('this is the id of the event to change', id)
 
-        console.log("this is the req.body that I want", req.body)
 
         let needToRentBike = false;
         let needToRentHelmet = false;
@@ -162,10 +142,10 @@ function routes(app) {
 
     app.delete('/registeredEvents:id', jwtAuth, (req, res) => {
         let id = req.params.id;
-        console.log('this is the id', id)
+        //console.log('this is the id', id)
 
         User.findOne({ "_id": req.user.id }, function (err, result) {
-            console.log('this is result', result)
+            //console.log('this is result', result)
             result.registeredEvents.id(id).remove();
             result.save();
             let myObj = {

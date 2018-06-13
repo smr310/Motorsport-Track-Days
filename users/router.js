@@ -10,7 +10,7 @@ const jsonParser = bodyParser.json({ extended: true });
 
 // POST REQUEST to register a new user
 router.post('/', jsonParser, (req, res) => {
-    console.log('This is req.body for /api/users', req.body);
+    //console.log('This is req.body for /api/users', req.body);
     const requiredFields = ['username', 'password'];
     const missingField = requiredFields.find(field => !(field in req.body));
 
@@ -123,11 +123,11 @@ router.post('/', jsonParser, (req, res) => {
             });
         })
         .then(user => {
-            console.log('user created', user)
+            //console.log('user created', user)
             return res.status(201).json(user.serialize());
         })
         .catch(err => {
-            console.log('this is error', err)
+            //console.log('this is error', err)
             // Forward validation errors on to the client, otherwise give a 500
             // error because something unexpected has happened
             if (err.reason === 'ValidationError') {
