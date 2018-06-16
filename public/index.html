@@ -20,24 +20,45 @@
     <div class = "top-header">
         <h1 class ="logo">Steve's Track Days</h1>
     </div>
-    <div class ="nav-bar">
+    <div class="mobile-nav-bar">
         <nav>
+            <div class="hamburger">&#9776; Menu </div>
+            <a class="mobile-nav-item homepage-button">
+                <span class="mobile-button">Home</span>
+            </a>
+            <a class="mobile-nav-item upcoming-events-button ">
+                <span class="mobile-button">Upcoming Events</span>
+            </a>
+            <a class="mobile-nav-item registered-events-button ">
+                <span class="mobile-button">Registered Events</span>
+            </a>
+            <a class="mobile-nav-item login-button ">
+                <span class="mobile-button">Login</span>
+            </a>
+            <a class="mobile-nav-item signout">
+                <span class="mobile-button">
+                    Sign out
+                </span>
+            </a>
+        </nav>
+    </div>
+    
+    <div class ="nav-bar">
+        <nav>  
             <a class="nav-item homepage-button">
-                <span>Home</span>
+                <span class="nav-button">Home</span>
             </a>
-            <a class="nav-item upcoming-events-button">
-                <span>Upcoming Events</span>
+            <a class="nav-item upcoming-events-button ">
+                <span class="nav-button">Upcoming Events</span>
             </a>
-            <a class="nav-item registered-events-button">
-                <span>Registered Events</span>
+            <a class="nav-item registered-events-button ">
+                <span class="nav-button">Registered Events</span>
             </a>
-            <a class="nav-item">
-                <span class="login-button">
-                    Login
-                </span>   
+            <a class="nav-item login-button ">
+                <span class="nav-button">Login</span>   
             </a>
-            <a class="nav-item" id="signout">
-                <span>
+            <a class="nav-item signout">
+                <span class="nav-button">
                     Sign out
                 </span>
             </a>
@@ -52,6 +73,11 @@
         <h3 class="hidden registered-text">Registered Events</h3>
     </div>
 
+    <div class="tv div-b">
+        <div class="screen mute" id="tv"></div>
+    </div>
+
+
     <div class = "div-a">
         <h3 class = "ride-text">Ride your motorcycle on the racetrack!</h3>
         <div class="w-btn-wrapper">
@@ -61,16 +87,6 @@
         </div>
     </div>
 
-    <div class="div-b">
-        <h2 class="video-text">Check out Ordos International Circuit located in China's Innermongolia Province in the video below</h2>
-        <div class='video-wrapper'>
-            <div id="video-outer-container">
-                <div class="video-container">
-                    <iframe width="500" height="300" src="https://www.youtube.com/embed/CslKVrXqRgo" frameborder="0" allowfullscreen></iframe>
-                </div>
-            </div>
-        </div>
-    </div>
 
     <div class="div-c hidden">
         <h3 class="alert-text">Please log in or sign up to view upcoming and registered events</h3>
@@ -145,8 +161,10 @@
             </form>
         </div>
     </div>
-
-
+   
+    
+ 
+    
 
     <script src="app.js"></script>
 </body>

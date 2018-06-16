@@ -35,7 +35,6 @@ fieldset{
     margin-top: 0px;
     margin-right: auto;
     margin-left: auto;
-    width: 500px;
     border-radius: 10px;
     /* border: 1px solid  black; */
 }
@@ -186,7 +185,6 @@ span a {
 
 .event-register-form,
 .event-update-form {
-    width: 400px;
     margin: auto;
 }
 
@@ -204,29 +202,74 @@ span a {
 .nav-bar {
     color: white;
     background: black;
-    height: 30px;
     font-size: 15px;
     font-family: "Open Sans",sans-serif;
     font-weight: 400;
     text-align: center;
-    cursor: pointer;
     border-bottom: 1px solid red;
     
 }
 
 .nav-item {
-    /* border: .1px solid white; */
+    display: none;
     padding: 10px;
     padding-bottom: 12px;
+    cursor: pointer;
 }
 
-.nav-item:hover {
-    background-color: #d62631;
-    border-top-left-radius: 5px;
-    border-top-right-radius: 5px;
-    transition-property: background-color, box-shadow, border, color, opacity;
-    transition-duration: 0.3s;
+.nav-button {
+    display: block;
+    text-align: left;
+    margin-left: 6%;
 }
+
+.mobile-nav-bar {
+    color: white;
+}
+
+.mobile-nav-item {
+    display: none;
+}
+
+.mobile-button {
+    display: block;
+    padding-left: 6%;
+    padding-top: 10px;
+    cursor: pointer;
+}
+
+.mobile-button:hover {
+            background-color: #d62631;
+            transition-property: background-color, box-shadow, border, color, opacity;
+            transition-duration: 0.3s;
+        }
+
+
+
+.hamburger {
+    text-align: left;
+    margin-left: 6%;
+    cursor: pointer;
+}
+
+.box-shadow-menu {
+  position: relative;
+  padding-left: 1.25em;
+}
+.box-shadow-menu:before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.25em;
+  width: 1em;
+  height: 0.15em;
+  background: black;
+  box-shadow: 
+    0 0.25em 0 0 black,
+    0 0.5em 0 0 black;
+}
+
+
 /*-- End of Header Styling --*/
 
 
@@ -312,6 +355,7 @@ span a {
 }
 
 .logo {
+    text-align: center;
     margin: 0px;
     padding-top: 30px;
 }
@@ -344,13 +388,13 @@ span a {
 
 .main-div {
     margin: auto;
-    padding: 60px;
     padding-top: 10px;
 }
 
 .track-event-wrapper {
        border: 1px solid  red;
-       width: 500px;
+       width: 95%;
+       /* width: 500px; */
        margin: auto;
        color: white;
        margin-bottom: 40px;
@@ -387,3 +431,55 @@ span a {
         width: 60%;
         margin: auto;
     }
+
+
+    @media only screen and (min-width: 600px)  {
+        .mobile-nav-bar {
+            display: none;
+        }
+        
+        nav {
+            height: 28px;
+        }
+        
+        .nav-item {
+            display: inline;
+        }
+        
+        .nav-item:hover {
+            background-color: #d62631;
+            border-top-left-radius: 5px;
+            border-top-right-radius: 5px;
+            transition-property: background-color, box-shadow, border, color, opacity;
+            transition-duration: 0.3s;
+        }
+
+        .nav-button {
+            
+            display: inline;
+            margin: auto;
+        }
+
+        .main-div {
+             width: 500px
+        }
+
+        .logo {
+            text-align: left;
+            padding-left: 30px;
+        }
+
+        .login-form-container {
+            width: 500px;
+        }
+    }
+
+
+
+.hide-nav-buttons {
+    display:none;
+}
+
+
+
+
