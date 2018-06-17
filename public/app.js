@@ -131,7 +131,7 @@ function displayUpcomingEvents() {
                             <div id=${value._id}>
                                 <p class="track-event-id hidden"> ID: <span >${value._id}</span></p>
                                 <p class="track-name">${value.trackName}</p>
-                                <p class="eventData"> ${moment(value.eventDate).format("MMM Do YY")}</p>
+                                <p class="eventData"> ${moment(value.eventDate).format("MMM Do, YYYY")}</p>
                                 <button class="register-button" type="button">REGISTER</button>
                             </div>
                         </div>

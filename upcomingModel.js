@@ -9,4 +9,4 @@ const upcomingEventSchema = mongoose.Schema({
 
 const UpcomingEvent = mongoose.model('UpcomingEvent', upcomingEventSchema);
 
-module.exports = { UpcomingEvent };
+module.exports = { UpcomingEvent };  
