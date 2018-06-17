@@ -489,12 +489,12 @@ function deleteRegisteredEvent() {
 
 function homePageButtonClickHandler() {
     $('body').on('click', '.homepage-button', function (event) {
+        $('.v-header').show();
         $('.nav-bar').addClass('.hidden')
         $('.upcoming-text').hide();
         $('.registered-text').hide();
         $('.login-form-container').hide();
         $('.div-c').hide();
-        $('.div-a').show();
         $('.div-b').show();
         $('.main-div').html("");
     });
@@ -502,28 +502,30 @@ function homePageButtonClickHandler() {
 
 function upcomingEventsHandler() {
     $('body').on('click', '.upcoming-events-button', function (event) {
+        $('.v-header').hide();
         $('.div-video').hide();
         $('.login-form-container').hide();
-        $('.div-a').hide();
         $('.div-b').hide();
+        $('.div-c').hide();
         displayUpcomingEvents();
     });
 }
 
 function registeredEventsHandler() {
     $('.registered-events-button').on('click', function (event) {
+        $('.v-header').hide();
         $('.main-div').html("");
         $('.upcoming-text').hide();
         $('.login-form-container').hide()
-        $('.div-a').hide();
         $('.div-b').hide();
+        $('.div-c').hide();
         getRegisteredEvents(updateDOM);
     })
 }
 
 function eventScheduleHandler() {
     $('body').on('click', '.event-schedule-btn', function (event) {
-        $('.div-a').hide();
+        $('.v-header').hide();
         $('.div-b').hide();
         displayUpcomingEvents();
     });
@@ -531,9 +533,11 @@ function eventScheduleHandler() {
 
 function loginHandler() {
     $('body').on('click', '.login-button', function (event) {
-        $('.div-a').hide();
+        $('.main-div').html("");
+        $('.registered-text').hide();
+        $('.div-c').show();
+        $('.v-header').hide();
         $('.div-b').hide();
-        $('.div-c').hide();
         $('.login-form-container').show();
     });
 }
@@ -550,3 +554,5 @@ $(function () {
     deleteRegisteredEvent();
     editRegisteredEvent();
 })
+
+
