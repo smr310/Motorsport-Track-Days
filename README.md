@@ -6,7 +6,7 @@ This is a template for motorsport event companies that organize track days (even
 
 ## Motivation
 Motorsport is one of my great passions. When registering for track day events over the last few years, I noticed that most of the track day company websites were out of date and had a boring feel to them. I wanted to build a template that companies could use that is exciting and easy to use for both clients and the business.  
-
+   
 ## Screenshots
 
 ![screenshot](screenshot.png)
