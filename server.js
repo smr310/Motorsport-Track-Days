@@ -12,14 +12,8 @@ const passport = require('passport');
 const { router: usersRouter } = require('./users');
 const { router: authRouter, localStrategy, jwtStrategy } = require('./auth');
 
-
-
-// Mongoose internally uses a promise-like object,
-// but it's better to make Mongoose use built in es6 promises
 mongoose.Promise = global.Promise;
 
-// config.js is where we control constants for entire
-// app like PORT and DATABASE_URL
 const { PORT, DATABASE_URL } = require('./config');
 
 
@@ -28,7 +22,6 @@ app.use(bodyParser.json());
 
 // Logging
 app.use(morgan('common'));
-
 
 // CORS
 app.use(function (req, res, next) {
@@ -49,28 +42,11 @@ app.use('/api/auth/', authRouter);
 
 const jwtAuth = passport.authenticate('jwt', { session: false });
 
-// A protected endpoint which needs a valid JWT to access it
-app.get('/api/protected', jwtAuth, (req, res) => {
-    return res.json({
-        data: 'rosebud'
-    });
-});
-
-
-
-
-
-
 new routes(app)
 
-
-// closeServer needs access to a server object, but that only
-// gets created when `runServer` runs, so we declare `server` here
-// and then assign a value to it in run
 let server;
 
 function runServer(databaseUrl, port = PORT) {
-    //console.log('this is first dbURL', databaseUrl)
     return new Promise((resolve, reject) => {
         console.log('this is the db URL: ', databaseUrl);
         mongoose.connect(databaseUrl, err => {
@@ -90,8 +66,6 @@ function runServer(databaseUrl, port = PORT) {
     });
 }
 
-// this function closes the server, and returns a promise. we'll
-// use it in our integration tests later.
 function closeServer() {
     return new Promise((resolve, reject) => {
         console.log('Closing server');

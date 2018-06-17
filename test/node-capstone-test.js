@@ -18,11 +18,8 @@ const { User } = require('../users/models');
 chai.use(chaiHttp);
 
 let token;
-//will eventually need to NOT hardcode the token value
-//let token2 = 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7InVzZXJuYW1lIjoic21yMzEwODgiLCJmaXJzdE5hbWUiOiJzdGV2ZSIsImxhc3ROYW1lIjoicm9tbSIsImlkIjoiNWIwNWVhNmY3MmI3NTkzNTJmZTNhZDU1In0sImlhdCI6MTUyNzExNDM2OCwiZXhwIjoxNTI3NzE5MTY4LCJzdWIiOiJzbXIzMTA4OCJ9.-Eph16lmxDYwPtm0IJ77QtHoo-bC5Y8hCfRCSMg7Bl8';
 
 let testUserObject;
-//let testEventId;
 
 function createUser() {
     console.log("Creating user.");
@@ -63,16 +60,10 @@ function loginUser(pw) {
             .post('/api/auth/login')
             .send(loginUser)
             .then((res) => {
-                console.log('this is res.body', res.body);
                 token = res.body.authToken;
-                console.log('this is the token: ', token);
-                //console.log('this it token2: ', token2)
-                //userId = res.body.data.userID;
-                
                 resolve();
             })
             .catch((error) => {
-                console.log('this is the !! error', error)
                 reject(error)
             });
     });
@@ -111,10 +102,6 @@ function tearDownDb() {
 
 describe('API resource', function () {
 
-    // we need each of these hook functions to return a promise
-    // otherwise we'd need to call a `done` callback. `runServer`,
-    // `seedBlogPostData` and `tearDownDb` each return a promise,
-    // so we return the value returned by these function calls.
     before(function () {
         return runServer(TEST_DATABASE_URL)
             .then(function () {
@@ -135,16 +122,12 @@ describe('API resource', function () {
         return closeServer();
     });
 
-    // note the use of nested `describe` blocks.
-    // this allows us to make clearer, more discrete tests that focus
-    // on proving something small
     describe('GET  / endpoint', function () {
         it('should return index html', function () {
             let res;
             return chai.request(app)
                 .get('/')
                 .then(function (_res) {
-                    //console.log('this is _res', _res)
                     res = _res
                     expect(res).to.have.status(200);
                     expect(res).to.be.html;
@@ -161,8 +144,6 @@ describe('API resource', function () {
                 .set('Authorization', "Bearer " + token)
                 .then(function (res) {
                     console.log('this is res.body for GET /upcomingEvents', res.body);
-                    //testEventId = res.body.events[1]._id;
-                    //console.log('this is testEventId', testEventId)
                     expect(res).to.have.status(200);
                 })
         });
@@ -172,15 +153,11 @@ describe('API resource', function () {
     describe('POST  /registeredEvents/:id', function () {
         it('should add a new registered event', function () {
 
-            console.log('this should be testUserObject:', testUserObject)
-            console.log('testUserObject.id:', testUserObject.id)
             return chai.request(app)
                 .post(`/registeredEvents/${testUserObject.id}`)
                 .set('Authorization', "Bearer " + token)
-                //.send(SOME OBJECT -- like data in ajax request);
                 .then(function (res) {
                    console.log('this is res.body for POST registeredEvents/:id', res.body)
-                //    console.log('thiiis is req.user.id: ', req.user.id)
                 })
 
         });

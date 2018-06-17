@@ -3,12 +3,10 @@ $('.hamburger').click(event => {
     $('.mobile-nav-item').toggle();
 })
 
-
 //Click on Tab Functionality in Login Form
 $('.signup-tab').css('background', '#f9fbfd');
 $('.login-form').hide();
 $('.login-tab').css('background', '#A9A9A9');
-
 
 $('.login-tab').click(event => {
     event.preventDefault();
@@ -18,7 +16,6 @@ $('.login-tab').click(event => {
     $('.login-tab').css('background', '#f9fbfd');
 });
 
-
 $('.signup-tab').click(event => {
     event.preventDefault();
     $('.register-form').show();
@@ -27,16 +24,11 @@ $('.signup-tab').click(event => {
     $('.signup-tab').css('background', '#f9fbfd');
 });
 
-
-
 //REGISTER New User
 //AJAX POST Request
-
 $('.js-register-form').submit(function (event) {
     event.preventDefault();
-    
     let userData = {}
-    
     userData.firstName = $('.inputFirstName').val()
     userData.lastName = $('.inputLastName').val()
     userData.username = $('.inputUsername').val()
@@ -64,7 +56,6 @@ $('.js-register-form').submit(function (event) {
         $.ajax({
             type: "POST",
             headers: { 'Content-Type': 'application/json' },
-            //contentType: 'application/json',
             url: '/api/auth/login',
             data: JSON.stringify(userData)
         })
@@ -75,7 +66,7 @@ $('.js-register-form').submit(function (event) {
                 displayUpcomingEvents();
             })
             .fail(function (error) {
-                
+
             })
     }
 });
@@ -84,7 +75,6 @@ $('.js-register-form').submit(function (event) {
 function logInExisting(ajaxAuthCall) {
     $('.js-login-form').submit(function (event) {
         event.preventDefault();
-
         let userData = {}
         userData.username = $('.js-login-form .inputUsername').val()
         userData.password = $('.js-login-form .inputPassword').val()
@@ -92,14 +82,11 @@ function logInExisting(ajaxAuthCall) {
         $.ajax({
             type: "POST",
             headers: { 'Content-Type': 'application/json' },
-            //contentType: 'application/json',
             url: '/api/auth/login',
             data: JSON.stringify(userData)
         })
             .done(function (user) {
                 $('.input').val("");
-                //console.log('this is user for existing login', user)
-                //console.log('this is user.userID : ', user.userID)
                 localStorage.setItem('token', user.authToken);
                 localStorage.setItem('userID', user.userID);
                 displayUpcomingEvents()
@@ -153,24 +140,16 @@ function displayUpcomingEvents() {
             }
             registerButtonClickHandler();
         },
-        fail: function() {
-            //console.log('fail')
-        },
         error: function (err) {
-            //console.log('error')
             $('.main-div').hide();
             $('.div-c').show();
             $('.login-form-container').show();
-        },
-        beforeSend: function (xhr) {
-
         }
     });
 }
 
 function getAndDisplayRegisteredEvents() {
     $('.registered-events-button').on('click', function (event) {
-        
         $('.login-form-container').hide()
         $('.main-div').html("");
         getRegisteredEvents(updateDOM);
@@ -188,18 +167,11 @@ function getRegisteredEvents(callbackFn) {
             $('.upcoming-text').hide();
             $('.registered-text').show();
             callbackFn(data) 
-            
         },
         error: function (err) {
-            //console.log(err);
-            //console.log('error');
-            // $('.div-c').hide();
             $('.div-c').show();
             $('.main-div').hide();
             $('.login-form-container').show();
-        },
-        beforeSend: function (xhr) {
-        
         }
     });
 }
@@ -208,7 +180,6 @@ function updateDOM(data) {
     $('.main-div').html("");
 
     for (value of data.events) {
-
         if (value.needToRentBike === true) {
             value.needToRentBike = "Yes";
         } else {
@@ -238,7 +209,6 @@ function updateDOM(data) {
         } else {
             value.needToRentBoots = "No";
         }
-
 
         $('.main-div').append(
             `
@@ -283,7 +253,6 @@ function registerButtonClickHandler() {
         $('.main-div').append(
             `
             <form id="registration">
-                
                 <fieldset class="event-register-form">
                     <p class="event-form-title">Registration Details</p>
                     First name:<br>
@@ -324,7 +293,6 @@ function registerButtonClickHandler() {
         let trackName = $($(this).parent().find('p')[1]).html();
         
         let eventDate = $($(this).parent().find('p')[2]).html();
-        //console.log('this is eventDate', eventDate)
         
         $("#registration").submit(function (event) {
             event.preventDefault();
@@ -353,24 +321,18 @@ function registerButtonClickHandler() {
                 type: "POST",
                 url: "registeredEvents/" + id,
                 data: JSON.stringify(values),
-                //dataType: 'json',
                 contentType: "application/json",
                 headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` },
                 success: function (data) {
                     getRegisteredEvents(updateDOM)
-                
                 },
                 error: function (err) {
-                    console.log(err)
-                },
-                beforeSend: function (xhr) {
+                    alert('an error occured, please try again');
                 }
             });
         });
     })
 }
-
-
 
 //////PUT
 function editRegisteredEvent() {
@@ -442,16 +404,13 @@ function editRegisteredEvent() {
                 type: "PUT",
                 url: "/registeredEvents" + id,
                 data: JSON.stringify(values),
-                //dataType: 'json',
                 contentType: "application/json",
                 headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` },
                 success: function (data) {
                     getRegisteredEvents(updateDOM);
                 },
                 error: function (err) {
-                    console.log(err)
-                },
-                beforeSend: function (xhr) {
+                    alert('an error occured, please try again');
                 }
             });
         });
@@ -463,7 +422,6 @@ function editRegisteredEvent() {
 //DELETE
 function deleteRegisteredEvent() {
     $('body').on('click', '.delete-button', function (event) {
-
         let id = $(this).parent().attr('id');
 
         $.ajax({
@@ -473,14 +431,10 @@ function deleteRegisteredEvent() {
             dataType: 'json',
             headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` },
             success: function (data) {
-                //updateDOM(data);
                 getRegisteredEvents(updateDOM)
             },
             error: function (err) {
-                console.log(err)
-            },
-            beforeSend: function (xhr) {
-
+                alert('an error occured, please try again');
             }
         });
     })
@@ -541,8 +495,6 @@ function loginHandler() {
         $('.login-form-container').show();
     });
 }
-
-
 
 //on page load do this
 $(function () {

@@ -4,7 +4,6 @@
     text-decoration: none;
 }
 
-
 html{
     margin: 0;
     padding: 0; 
@@ -27,6 +26,9 @@ fieldset{
     background-color: #f9fbfd;
 }
 /*--End of Universal Styling--*/
+
+/* Video Background Styling */
+
 .v-header{
     height:100vh;
     display:flex;
@@ -78,22 +80,7 @@ fieldset{
     padding-bottom: 2rem;
 }
 
-.btn{
-    background:#34b3a0;
-    color:#fff;
-    font-size: 1.2rem;
-    padding: 1rem 2rem;
-    text-decoration: none;
-}
-
-
-/* VIDEO BG STYLING */
-
-
-
-/* END OF VIDEO BG STYLING */
-
-
+/* End of Video Background Styling */
 
 
 
@@ -105,7 +92,6 @@ fieldset{
     margin-right: auto;
     margin-left: auto;
     border-radius: 10px;
-    /* border: 1px solid  black; */
 }
 
 .login-form, .register-form {
@@ -267,7 +253,6 @@ span a {
     color: white;
     background: black;
     height: 80px;
-    /* border-bottom: .1px solid #d62631; */
 }
 
 .nav-bar {
@@ -345,7 +330,9 @@ span a {
     0 0.5em 0 0 black;
 }
 
-
+.hide-nav-buttons {
+    display:none;
+}
 /*-- End of Header Styling --*/
 
 
@@ -444,8 +431,6 @@ span a {
 
 
 
-
-
 /* Additional Form Styling */
 .rental-label {
     display: inline;
@@ -469,7 +454,6 @@ span a {
 .track-event-wrapper {
        border: 1px solid  red;
        width: 95%;
-       /* width: 500px; */
        margin: auto;
        color: white;
        margin-bottom: 40px;
@@ -490,7 +474,6 @@ span a {
     border: 1px solid white;
     position: relative;
     padding-bottom: 56.25%;
-    /* padding-top: 30px;  */
     height: 0;
     overflow: hidden;
     }
@@ -504,7 +487,6 @@ span a {
     }
 
     .video-wrapper {
-        /* width: 60%; */
         margin: auto;
     }
 
@@ -551,20 +533,3 @@ span a {
     }
 
 
-
-.hide-nav-buttons {
-    display:none;
-}
-
-
-
-#video{
- position: relative;
- background: transparent;
-}
-
-.ytplayer-container{
- position: absolute;
- top: 0;
- z-index: -1;
-}
