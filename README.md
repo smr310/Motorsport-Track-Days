@@ -1,4 +1,7 @@
 # Motorsport Track Days
+
+Live link: https://obscure-mountain-61250.herokuapp.com/index.html
+
 This is a template for motorsport event companies that organize track days (events for which attendees can race their motorcycles or cars on real race tracks. 
 
 ## Motivation
@@ -13,7 +16,7 @@ Many motorsport event company websites are out-of-date and to be frank -- look l
 
 * HTML
 * CSS
-* Javascript/jQuery
+* Javascript, jQuery
 * Node.js 
-* MongoDB 
-* Mocha / Chai 
+* MongoDB, Mlab, Mongoose
+* Mocha, Chai 
