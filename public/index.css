@@ -4,9 +4,6 @@
     text-decoration: none;
 }
 
-p {
-    color: white;
-}
 
 html{
     margin: 0;
@@ -67,7 +64,7 @@ fieldset{
     left: 0;
     background: black;
     z-index: 1;
-    opacity:0.85;
+    opacity:0.65;
 }
 
 .header-content h1{
