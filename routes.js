@@ -5,6 +5,7 @@ let User = require('./users/models').User
 const passport = require('passport');
 const jwtAuth = passport.authenticate('jwt', { session: false });
 
+
 function routes(app) {
 
     app.get('/upcomingEvents', jwtAuth, (req, res) => {
